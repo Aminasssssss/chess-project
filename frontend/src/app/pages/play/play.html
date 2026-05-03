@@ -1,199 +1,362 @@
 <div class="play-page">
+
+  <!-- Confetti -->
+  @if (showConfetti) {
+    <div class="confetti-field" aria-hidden="true">
+      @for (i of confettiArr; track i) {
+        <div class="cf-piece" [style]="'--i:'+i"></div>
+      }
+    </div>
+  }
+
+  <!-- ══ SELECT SCREEN ══ -->
   @if (mode === 'select') {
     <div class="select-screen">
-      <div class="container">
-        <div class="game-modes">
-          <span class="section-label">ВЫБЕРИ РЕЖИМ</span>
-          <h1>Играть</h1>
-          <div class="modes-grid">
-            <div class="mode-card active-mode">
-              <span class="mode-num">01</span>
-              <h3>Против AI</h3>
-              <p>Minimax алгоритм с 5 уровнями сложности</p>
+      <div class="ss-ambient">
+        <span style="left:3%;top:10%;font-size:8rem;--d:8s;--del:0s;--r:-8deg;--y:-28px">♔</span>
+        <span style="right:4%;top:8%;font-size:6rem;--d:11s;--del:2s;--r:6deg;--y:-22px">♛</span>
+        <span style="left:5%;bottom:12%;font-size:5rem;--d:9s;--del:1s;--r:4deg;--y:-18px">♟</span>
+        <span style="right:5%;bottom:15%;font-size:7rem;--d:7s;--del:3s;--r:-5deg;--y:-24px">♞</span>
+        <span style="left:48%;top:5%;font-size:4rem;--d:12s;--del:1.5s;--r:3deg;--y:-16px">♜</span>
+      </div>
+
+      <div class="ss-beam b1"></div>
+      <div class="ss-beam b2"></div>
+      <div class="ss-orb o1"></div>
+      <div class="ss-orb o2"></div>
+      <div class="ss-scan"></div>
+
+      <div class="ss-inner">
+        <div class="ss-grid">
+
+          <!-- LEFT: 3D piece + title -->
+          <div class="ss-left">
+            <div class="ss-3d-piece">
+              <app-chess-piece [type]="'knight'" [thinking]="false"></app-chess-piece>
             </div>
-            <a routerLink="/play/multiplayer" class="mode-card">
-              <span class="mode-num">02</span>
-              <h3>Мультиплеер</h3>
-              <p>Создай комнату и играй с другом по ссылке</p>
-              <span class="mode-arrow">→</span>
-            </a>
-            <a routerLink="/puzzle" class="mode-card">
-              <span class="mode-num">03</span>
-              <h3>Puzzle Rush</h3>
-              <p>Реши максимум задач за 5 минут</p>
-              <span class="mode-arrow">→</span>
-            </a>
+            <div class="ss-title-block">
+              <span class="ss-label">ВЫБЕРИ РЕЖИМ</span>
+              <h1 class="ss-h1">Играть<span class="ss-dot">.</span></h1>
+              <p>Выбери формат и настрой партию — твоя игра, твои правила</p>
+            </div>
+
+            <div class="ss-live-strip">
+              <div class="sls-item">
+                <span class="sls-dot"></span>
+                <span class="sls-num">{{ liveOnline }}</span>
+                <span class="sls-lbl">онлайн</span>
+              </div>
+              <div class="sls-div"></div>
+              <div class="sls-item">
+                <span class="sls-num">{{ liveGames }}</span>
+                <span class="sls-lbl">игр сейчас</span>
+              </div>
+              <div class="sls-div"></div>
+              <div class="sls-item">
+                <span class="sls-num">{{ liveElo }}</span>
+                <span class="sls-lbl">макс ELO онлайн</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: settings -->
+          <div class="ss-right">
+            <div class="mode-cards">
+              <div class="mcard mcard-active">
+                <div class="mcard-tl"></div>
+                <div class="mcard-ico">♟</div>
+                <span class="mcard-n">01</span>
+                <h3>Против AI</h3>
+                <p>Stockfish · 5 уровней · Win probability · Opening detector</p>
+                <div class="mcard-tags"><span>Stockfish</span><span>5 уровней</span><span>Win ML</span></div>
+                <div class="mcard-bar-wrap"><div class="mcard-bar" style="width:100%"></div></div>
+              </div>
+              <a routerLink="/play/multiplayer" class="mcard">
+                <div class="mcard-tl"></div>
+                <div class="mcard-ico">♞</div>
+                <span class="mcard-n">02</span>
+                <h3>Мультиплеер</h3>
+                <p>WebSocket · Реальное время · Комната по ссылке</p>
+                <div class="mcard-tags"><span>WebSocket</span><span>Real-time</span></div>
+                <div class="mcard-footer"><div class="mcard-bar-wrap"><div class="mcard-bar"></div></div><span class="mcard-go">→</span></div>
+              </a>
+              <a routerLink="/puzzle" class="mcard">
+                <div class="mcard-tl"></div>
+                <div class="mcard-ico">♜</div>
+                <span class="mcard-n">03</span>
+                <h3>Puzzle Rush</h3>
+                <p>5 минут · Combo · Монеты · Рекорд</p>
+                <div class="mcard-tags"><span>5 минут</span><span>Combo</span></div>
+                <div class="mcard-footer"><div class="mcard-bar-wrap"><div class="mcard-bar"></div></div><span class="mcard-go">→</span></div>
+              </a>
+            </div>
+
+            <div class="divider-line"></div>
+
+            <span class="ss-label">НАСТРОЙКИ ПАРТИИ</span>
+
+            <div class="settings-grid">
+              <div class="setting-card">
+                <h4>Цвет фигур</h4>
+                <div class="color-opts">
+                  <button class="color-btn" [class.active]="playerColor==='w'" (click)="playerColor='w'">
+                    <span class="cb-p">♔</span>Белые
+                  </button>
+                  <button class="color-btn" [class.active]="playerColor==='b'" (click)="playerColor='b'">
+                    <span class="cb-p">♚</span>Чёрные
+                  </button>
+                </div>
+              </div>
+
+              <div class="setting-card">
+                <h4>Сложность</h4>
+                <div class="diff-opts">
+                  @for (d of difficulties; track d.value) {
+                    <button class="diff-btn" [class.active]="difficulty===d.value" (click)="difficulty=d.value">
+                      {{ d.label }}
+                    </button>
+                  }
+                </div>
+                <div class="diff-visual">
+                  <div class="dv-bar">
+                    <div class="dv-fill" [style.width]="(difficulty/5*100)+'%'"></div>
+                  </div>
+                  <span class="dv-label">{{ getDiffLabel() }}</span>
+                </div>
+              </div>
+
+              <div class="setting-card">
+                <h4>Контроль времени</h4>
+                <div class="diff-opts">
+                  @for (t of timeControls; track t.label) {
+                    <button class="diff-btn" [class.active]="selectedTime.label===t.label" (click)="selectedTime=t">
+                      {{ t.label }}
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="feat-highlights">
+              <div class="fh-item">
+                <span class="fhi-ico">♗</span>
+                <div>
+                  <span class="fhi-t">Opening Detector</span>
+                  <span class="fhi-d">Определяет дебют в реальном времени</span>
+                </div>
+              </div>
+              <div class="fh-item">
+                <span class="fhi-ico">♕</span>
+                <div>
+                  <span class="fhi-t">Win Probability</span>
+                  <span class="fhi-d">ML модель после каждого хода</span>
+                </div>
+              </div>
+              <div class="fh-item">
+                <span class="fhi-ico">♘</span>
+                <div>
+                  <span class="fhi-t">AI Coach</span>
+                  <span class="fhi-d">Разбор партии от Groq AI</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-start" (click)="startGame()">
+              <span class="btn-shimmer"></span>
+              Начать игру
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3.5 9h11M10 4.5L14.5 9 10 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
         </div>
-
-        <div class="divider"></div>
-
-        <span class="section-label">ИГРА ПРОТИВ AI</span>
-        <h2>Настрой партию</h2>
-
-        <div class="settings-grid">
-          <div class="setting-card">
-            <h3>Цвет фигур</h3>
-            <div class="color-options">
-              <button class="color-btn" [class.active]="playerColor === 'w'" (click)="playerColor = 'w'">Белые</button>
-              <button class="color-btn" [class.active]="playerColor === 'b'" (click)="playerColor = 'b'">Чёрные</button>
-            </div>
-          </div>
-
-          <div class="setting-card">
-            <h3>Сложность</h3>
-            <div class="difficulty-options">
-              @for (d of difficulties; track d.value) {
-                <button class="diff-btn" [class.active]="difficulty === d.value" (click)="difficulty = d.value">
-                  {{ d.label }}
-                </button>
-              }
-            </div>
-          </div>
-
-          <div class="setting-card">
-            <h3>Контроль времени</h3>
-            <div class="difficulty-options">
-              @for (t of timeControls; track t.label) {
-                <button class="diff-btn" [class.active]="selectedTime.label === t.label" (click)="selectedTime = t">
-                  {{ t.label }}
-                </button>
-              }
-            </div>
-          </div>
-        </div>
-
-        <button class="btn-primary start-btn" (click)="startGame()">
-          Начать игру против AI
-        </button>
       </div>
     </div>
   }
 
+  <!-- ══ GAME SCREEN ══ -->
   @if (mode === 'playing' || mode === 'finished') {
     <div class="game-screen">
-      <div class="container">
+      <div class="gs-inner">
+        <div class="gs-topbar">
+          <div class="gtb-left">
+            @if (openingName) {
+              <div class="opening-badge">
+                <span class="ob-dot"></span>
+                {{ openingName }}
+              </div>
+            }
+            @if (isAiThinking) {
+              <div class="thinking-badge">
+                <div class="tb-spin"></div>
+                <span>AI думает...</span>
+              </div>
+            }
+          </div>
+          <div class="gtb-center">
+            <div class="game-breadcrumb">
+              <span (click)="newGame()" class="gb-link">Играть</span>
+              <span class="gb-sep">›</span>
+              <span>Против AI</span>
+              <span class="gb-sep">›</span>
+              <span class="gb-current">{{ getDifficultyName() }}</span>
+            </div>
+          </div>
+          <div class="gtb-right">
+            <button class="btn-secondary" (click)="newGame()">← Новая игра</button>
+          </div>
+        </div>
+
         <div class="game-layout">
-          <div class="board-section">
-            <app-board
-              [playerColor]="playerColor"
-              [difficulty]="difficulty"
-              [timeControl]="selectedTime"
-              [boardTheme]="selectedTheme"
-              (moveMade)="onMoveMade($event)"
-              (gameOver)="onGameOver($event)"
-              (positionEval)="onPositionEval($event)">
-            </app-board>
+          <div class="board-area">
+            <div class="captured-row">
+              <div class="cap-pieces">{{ capturedByWhite.join('') }}</div>
+              @if (materialAdvantage > 0) {
+                <span class="cap-adv">+{{ materialAdvantage }}</span>
+              }
+            </div>
+
+            <div class="board-container" [class.board-in-check]="isInCheck">
+              <app-board
+                [playerColor]="playerColor"
+                [difficulty]="difficulty"
+                [timeControl]="selectedTime"
+                [boardTheme]="selectedTheme"
+                (moveMade)="onMoveMade($event)"
+                (gameOver)="onGameOver($event)"
+                (positionEval)="onPositionEval($event)">
+              </app-board>
+            </div>
+
+            <div class="captured-row">
+              <div class="cap-pieces">{{ capturedByBlack.join('') }}</div>
+              @if (materialAdvantage < 0) {
+                <span class="cap-adv">+{{ -materialAdvantage }}</span>
+              }
+            </div>
           </div>
 
-          <div class="side-section">
-            <div class="win-prob-card">
-              <span class="section-label">WIN PROBABILITY</span>
-              <div class="prob-bar">
-                <div class="prob-white" [style.width.%]="winProb"></div>
-                <div class="prob-black" [style.width.%]="100 - winProb"></div>
+          <div class="side-panel">
+            <div class="thinking-piece-card" [class.is-thinking]="isAiThinking">
+              <div class="tpc-3d">
+                <app-chess-piece [type]="'knight'" [thinking]="isAiThinking"></app-chess-piece>
               </div>
-              <div class="prob-labels">
-                <span>Белые {{ winProb | number:'1.0-0' }}%</span>
-                <span>Чёрные {{ 100 - winProb | number:'1.0-0' }}%</span>
+              <div class="tpc-info">
+                <span class="tpc-label">{{ isAiThinking ? 'AI анализирует...' : 'AI готов' }}</span>
+                <span class="tpc-depth">Depth {{ difficulty * 3 }}</span>
               </div>
             </div>
 
-            <div class="moves-card">
-              <span class="section-label">ИСТОРИЯ ХОДОВ</span>
-              <div class="moves-list">
-                @for (move of moveHistory; track $index; let i = $index) {
-                  @if (i % 2 === 0) {
+            <div class="panel-card">
+              <span class="p-label">WIN PROBABILITY</span>
+              <div class="prob-wrap">
+                <div class="prob-bar-outer">
+                  <div class="prob-bar-inner" [style.width]="winProb+'%'" [style.background]="getProbColor()"></div>
+                </div>
+                <div class="prob-labels">
+                  <span [style.color]="winProb>50?getProbColor():'var(--text-dim)'">Белые {{ winProb | number:'1.0-0' }}%</span>
+                  <span [style.color]="winProb<50?getProbColor():'var(--text-dim)'">Чёрные {{ 100-winProb | number:'1.0-0' }}%</span>
+                </div>
+                <div class="prob-mini-chart">
+                  @for (v of probHistory; track $index; let last=$last) {
+                    <div class="pmc-bar" [class.pmc-last]="last" [style.height]="v+'%'"></div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <span class="p-label">ИСТОРИЯ ХОДОВ</span>
+              <div class="moves-wrap">
+                @for (move of moveHistory; track $index; let i=$index) {
+                  @if (i%2===0) {
                     <div class="move-pair">
-                      <span class="move-num">{{ (i / 2) + 1 }}.</span>
+                      <span class="mn">{{ (i/2)+1 }}.</span>
                       <span class="move">{{ moveHistory[i] }}</span>
-                      <span class="move">{{ moveHistory[i + 1] || '' }}</span>
+                      <span class="move last">{{ moveHistory[i+1]||'' }}</span>
                     </div>
                   }
                 }
               </div>
             </div>
 
-            <button class="btn-customize" (click)="showCustomModal = true">
-              <span class="customize-preview">
-                <span class="preview-sq" [style.background]="lightColor"></span>
-                <span class="preview-sq" [style.background]="darkColor"></span>
+            <button class="theme-btn" (click)="showCustomModal=true">
+              <span class="tp-swatches">
+                <span [style.background]="lightColor"></span>
+                <span [style.background]="darkColor"></span>
               </span>
               Тема доски
-            </button>
-
-            <button class="btn-secondary" (click)="newGame()">
-              Новая игра
             </button>
           </div>
         </div>
 
+        <!-- RESULT PANEL -->
         @if (mode === 'finished') {
-          <div class="result-panel">
-            <div class="result-header">
-              <h2>{{ getResultText() }}</h2>
-              <span class="moves-count">{{ moveHistory.length }} ходов</span>
+          <div class="result-panel" [class]="'result-'+getResultClass()">
+            <div class="rp-deco">
+              <span class="rpd-piece">{{ getResultClass()==='win'?'♔':getResultClass()==='loss'?'♚':'♕' }}</span>
+            </div>
+            <div class="result-top">
+              <div class="result-badge" [class]="'result-'+getResultClass()">{{ getResultText() }}</div>
+              <div class="result-meta">
+                <span class="rm-moves">{{ moveHistory.length }} ходов</span>
+                @if (openingName) {
+                  <span class="rm-opening">{{ openingName }}</span>
+                }
+              </div>
             </div>
 
-            @if (!analysis && !analyzing) {
-              <button class="btn-primary analyze-btn" (click)="analyzeGame()">
-                Разбор партии от AI Coach
-              </button>
-            }
-
-            @if (analyzing) {
-              <div class="analyzing">
-                <span>AI анализирует партию...</span>
-              </div>
-            }
-
-            @if (analysis) {
-              <div class="analysis-result">
-                <span class="section-label">AI COACH</span>
-                <div class="analysis-sections">
-                  @for (section of analysis.split('\n\n'); track $index) {
-                    @if (section.trim()) {
-                      <div class="analysis-section">
-                        <p>{{ section }}</p>
-                      </div>
-                    }
-                  }
-                </div>
-              </div>
-
-            }
             @if (personality) {
               <div class="personality-card">
-                <span class="personality-icon">{{ personality.icon }}</span>
-                <div class="personality-info">
-                  <span class="section-label">СТИЛЬ ИГРЫ</span>
+                <span class="pc-icon">{{ personality.icon }}</span>
+                <div>
+                  <span class="p-label">СТИЛЬ ИГРЫ</span>
                   <h3>{{ personality.type }}</h3>
                   <p>{{ personality.desc }}</p>
                 </div>
               </div>
             }
 
-            <button class="btn-secondary pgn-btn" (click)="copyPgn()">
-              {{ pgnCopied ? 'Скопировано' : 'Скопировать PGN' }}
-            </button>
-
-            <button class="btn-secondary" (click)="newGame()">
-              Сыграть ещё
-            </button>
+            <div class="result-actions">
+              @if (!analysis && !analyzing) {
+                <button class="btn-primary" (click)="analyzeGame()">Разбор от AI Coach</button>
+              }
+              @if (analyzing) {
+                <div class="analyzing-state">
+                  <div class="spin"></div>
+                  <span>AI анализирует партию...</span>
+                </div>
+              }
+              @if (analysis) {
+                <div class="analysis-result">
+                  <span class="p-label">AI COACH</span>
+                  @for (section of analysis.split('\n\n'); track $index) {
+                    @if (section.trim()) {
+                      <div class="analysis-block"><p>{{ section }}</p></div>
+                    }
+                  }
+                </div>
+              }
+              <div class="result-btns">
+                <button (click)="copyPgn()">{{ pgnCopied?'Скопировано':'Скопировать PGN' }}</button>
+                <button (click)="newGame()">Сыграть ещё</button>
+              </div>
+            </div>
           </div>
         }
       </div>
     </div>
   }
 
+  <!-- MODAL -->
   @if (showCustomModal) {
-    <div class="modal-overlay" (click)="showCustomModal = false">
+    <div class="modal-overlay" (click)="showCustomModal=false">
       <div class="custom-modal" (click)="$event.stopPropagation()">
-        <span class="section-label">КАСТОМИЗАЦИЯ ДОСКИ</span>
-
+        <h3>Тема доски</h3>
         <div class="preset-themes">
           @for (t of presetThemes; track t.label) {
-            <button class="preset-btn" [class.active]="lightColor === t.light && darkColor === t.dark" (click)="lightColor = t.light; darkColor = t.dark">
+            <button class="preset-btn" [class.active]="lightColor===t.light&&darkColor===t.dark"
+                    (click)="lightColor=t.light;darkColor=t.dark">
               <span class="preset-preview">
                 <span [style.background]="t.light"></span>
                 <span [style.background]="t.dark"></span>
@@ -204,39 +367,26 @@
             </button>
           }
         </div>
-
-        <div class="divider-line"></div>
-
         <div class="color-pickers">
           <div class="picker-row">
-            <span class="picker-label">Светлые клетки</span>
-            <div class="picker-right">
-              <div class="picker-preview" [style.background]="lightColor"></div>
-              <input type="color" [(ngModel)]="lightColor" />
-            </div>
+            <span>Светлые клетки</span>
+            <input type="color" [(ngModel)]="lightColor"/>
           </div>
           <div class="picker-row">
-            <span class="picker-label">Тёмные клетки</span>
-            <div class="picker-right">
-              <div class="picker-preview" [style.background]="darkColor"></div>
-              <input type="color" [(ngModel)]="darkColor" />
-            </div>
+            <span>Тёмные клетки</span>
+            <input type="color" [(ngModel)]="darkColor"/>
           </div>
         </div>
-
         <div class="board-mini-preview">
-          @for (row of [0,1,2,3,4,5,6,7]; track $index; let ri = $index) {
+          @for (row of [0,1,2,3,4,5,6,7]; track row; let ri=$index) {
             <div class="mini-row">
-              @for (col of [0,1,2,3,4,5,6,7]; track $index; let ci = $index) {
-                <div class="mini-sq" [style.background]="(ri + ci) % 2 === 0 ? lightColor : darkColor"></div>
+              @for (col of [0,1,2,3,4,5,6,7]; track col; let ci=$index) {
+                <div class="mini-sq" [style.background]="(ri+ci)%2===0?lightColor:darkColor"></div>
               }
             </div>
           }
         </div>
-
-        <button class="btn-primary" (click)="showCustomModal = false">
-          Применить
-        </button>
+        <button class="btn-primary" (click)="showCustomModal=false">Применить</button>
       </div>
     </div>
   }

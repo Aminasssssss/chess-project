@@ -1,0 +1,95 @@
+<div class="shop-page">
+
+  <div class="shop-header">
+    <div class="sh-bg"></div>
+    <div class="container">
+      <span class="s-label">МАГАЗИН</span>
+      <h1>Chess Arena <em>Store</em></h1>
+      <p>Покупай темы и тайтлы за монеты — монеты зарабатываются в игре</p>
+
+      <div class="coins-display">
+        <span class="cd-icon">◈</span>
+        <span class="cd-num">{{ coins }}</span>
+        <span class="cd-label">монет</span>
+        <a routerLink="/puzzle" class="cd-earn">+ Заработать →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    @if (buyMsg) {
+      <div class="buy-toast">{{ buyMsg }}</div>
+    }
+
+    <div class="shop-tabs">
+      @for (tab of tabs; track tab.id) {
+        <button class="st-btn" [class.st-active]="activeTab===tab.id" (click)="activeTab=tab.id">
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+
+    @if (activeTab === 'themes') {
+      <div class="themes-section">
+        <div class="themes-grid">
+          @for (t of themes; track t.id) {
+            <div class="th-card" [class.th-active]="t.active" [class.th-owned]="t.owned">
+              <div class="th-preview">
+                <div class="th-board-preview" [style]="'--l:'+t.l+';--d:'+t.d">
+                  @for (r of [0,1,2,3]; track r) {
+                    <div class="tbp-row">
+                      @for (c of [0,1,2,3]; track c) {
+                        <div class="tbp-sq" [class.tbp-l]="(r+c)%2===0"></div>
+                      }
+                    </div>
+                  }
+                </div>
+                @if (t.active) {
+                  <div class="th-active-badge">Активна</div>
+                }
+              </div>
+              <div class="th-info">
+                <h3>{{ t.name }}</h3>
+                <p>{{ t.desc }}</p>
+                <div class="th-footer">
+                  @if (t.price === 0) {
+                    <span class="th-free">Бесплатно</span>
+                  } @else {
+                    <span class="th-price">◈ {{ t.price }}</span>
+                  }
+                  <button class="th-btn" (click)="buy(t,'theme')"
+                          [class.th-btn-owned]="t.owned"
+                          [class.th-btn-active]="t.active">
+                    {{ t.active ? 'Активна' : t.owned ? 'Применить' : 'Купить' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (activeTab === 'titles') {
+      <div class="titles-section">
+        <p class="titles-hint">Тайтлы отображаются рядом с именем в профиле и лидерборде</p>
+        <div class="titles-grid">
+          @for (t of titles; track t.id) {
+            <div class="tt-card" [class.tt-owned]="t.owned">
+              <div class="tt-name">{{ t.name }}</div>
+              <p class="tt-desc">{{ t.desc }}</p>
+              <div class="tt-footer">
+                <span class="tt-price">◈ {{ t.price }}</span>
+                <button class="tt-btn" (click)="buy(t,'title')" [class.tt-owned]="t.owned">
+                  {{ t.owned ? 'Применить' : 'Купить' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

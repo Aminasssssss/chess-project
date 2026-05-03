@@ -1,79 +1,330 @@
-<div class="leaderboard-page">
-  <div class="page-header">
-    <div class="container">
-      <span class="section-label">KAZAKHSTAN LEAGUE</span>
-      <h1>Рейтинг игроков</h1>
-      <p>Соревнуйся за честь своего города</p>
-    </div>
+@if (toast) {
+  <div class="lb-toast" [class.toast-success]="toast.type==='success'"
+       [class.toast-error]="toast.type==='error'"
+       [class.toast-info]="toast.type==='info'">
+    {{ toast.msg }}
   </div>
+}
 
-  <div class="container">
+<canvas #bgCanvas class="lb-bg-canvas"></canvas>
+<canvas #particleCanvas class="lb-particle-canvas"></canvas>
+
+<div class="lb-orbs">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="lb-scan"></div>
+
+<div class="lb-chess-ambient">
+  <span class="ca-p" style="left:2%;top:10%;--fs:8rem;--d:12s;--del:0s;  --r:-10deg;--fy:-28px">♔</span>
+  <span class="ca-p" style="right:3%;top:14%;--fs:6rem;--d:9s; --del:2s;  --r:8deg; --fy:-20px">♛</span>
+  <span class="ca-p" style="left:4%;bottom:12%;--fs:5rem;--d:11s;--del:1s;  --r:5deg; --fy:-24px">♟</span>
+  <span class="ca-p" style="right:4%;bottom:18%;--fs:7rem;--d:8s; --del:3s;  --r:-6deg;--fy:-22px">♞</span>
+  <span class="ca-p" style="left:44%;top:4%;--fs:4rem;--d:14s;--del:1.5s;--r:3deg; --fy:-14px">♗</span>
+  <span class="ca-p" style="right:19%;bottom:7%;--fs:5rem;--d:10s;--del:4s; --r:-4deg;--fy:-18px">♖</span>
+</div>
+
+<div class="leaderboard-page">
+
+  <header class="lb-header">
+    <div class="lh-live-bar">
+      <span class="live-label"><span class="live-dot"></span>LIVE</span>
+      <div class="ticker-track">
+        <div class="ticker-inner">
+          @for (item of tickerItems; track item) { <span>{{ item }}</span> }
+          @for (item of tickerItems; track item) { <span>{{ item }}</span> }
+        </div>
+      </div>
+      <div class="live-stats">
+        <div class="ls-item"><span class="ls-dot"></span><strong>{{ liveOnline }}</strong>&nbsp;онлайн</div>
+        <div class="ls-item"><strong>{{ liveGames }}</strong>&nbsp;партий</div>
+      </div>
+    </div>
+
+    <div class="lh-inner">
+      <div class="lh-title-area">
+        <span class="lh-badge">♛&nbsp;&nbsp;KAZAKHSTAN LEAGUE&nbsp;&nbsp;♛</span>
+        <h1 class="lh-title">Рейтинг <em>Игроков</em></h1>
+        <p class="lh-sub">Борьба за честь своего города · Топ {{ players.length || '—' }} шахматистов Казахстана</p>
+      </div>
+
+      <div class="lh-right">
+        <div class="period-tabs">
+          <button [class.active]="selectedPeriod==='all'"   (click)="selectPeriod('all')">Всё время</button>
+          <button [class.active]="selectedPeriod==='month'" (click)="selectPeriod('month')">Месяц</button>
+          <button [class.active]="selectedPeriod==='week'"  (click)="selectPeriod('week')">Неделя</button>
+        </div>
+        <div class="search-wrap" [class.se]="searchExpanded">
+          <button class="search-btn" (click)="toggleSearch()">⌕</button>
+          <input class="search-input" [(ngModel)]="searchQuery" placeholder="Найти игрока..." [class.visible]="searchExpanded" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="lb-body">
+
+    <div class="global-stats">
+      <div class="gs-card reveal" style="--i:0">
+        <span class="gs-num">{{ animLiveOnline }}</span>
+        <span class="gs-lbl">Онлайн сейчас</span>
+        <div class="gs-pulse"></div>
+      </div>
+      <div class="gs-card reveal" style="--i:1">
+        <span class="gs-num">{{ animLiveGames }}</span>
+        <span class="gs-lbl">Активных партий</span>
+      </div>
+      <div class="gs-card reveal" style="--i:2">
+        <span class="gs-num">{{ animGamesToday }}</span>
+        <span class="gs-lbl">Партий сегодня</span>
+      </div>
+      <div class="gs-card reveal" style="--i:3">
+        <span class="gs-num">{{ animTotalPlayers }}</span>
+        <span class="gs-lbl">Всего игроков</span>
+      </div>
+    </div>
+
+    <div class="rising-section reveal">
+      <div class="section-row">
+        <span class="section-label">РАСТУЩИЕ ЗВЁЗДЫ</span>
+        <span class="section-sub">За последние 7 дней</span>
+      </div>
+      <div class="rising-grid">
+        @for (star of risingStars; track star.name; let i = $index) {
+          <div class="rising-card" [style.animation-delay]="(i*.12)+'s'">
+            <div class="rc-index">0{{ i+1 }}</div>
+            <div class="rc-info">
+              <h4>{{ star.name }}</h4>
+              <p>{{ star.city }} · {{ star.elo }} ELO · серия {{ star.streak }}</p>
+            </div>
+            <div class="rc-change">
+              <span class="rc-delta">+{{ star.change }}</span>
+              <span class="rc-unit">ELO</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="live-matches reveal">
+      <span class="section-label" style="margin-bottom:.75rem;display:block">СЕЙЧАС ИГРАЮТ</span>
+      <div class="lm-grid">
+        @for (match of liveMatches; track match.w) {
+          <div class="lm-card" [class.lm-active]="match.isLive">
+            @if (match.isLive) { <span class="lm-live-badge">LIVE</span> }
+            <div class="lm-players">
+              <span class="lm-w">♔ {{ match.w }}</span>
+              <span class="lm-vs">vs</span>
+              <span class="lm-b">♚ {{ match.b }}</span>
+            </div>
+            <div class="lm-meta">
+              <span class="lm-move">Ход {{ match.move }}</span>
+              <span class="lm-time">{{ match.time }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
     @if (cityStats.length > 0) {
-      <div class="city-league">
-        <span class="section-label">КОМАНДНЫЙ ЗАЧЁТ</span>
+      <div class="city-league reveal">
+        <div class="section-row">
+          <span class="section-label">КОМАНДНЫЙ ЗАЧЁТ</span>
+          <span class="section-sub">по среднему ELO города</span>
+        </div>
         <div class="city-grid">
           @for (city of cityStats; track city.city; let i = $index) {
-            <div class="city-card" [class.top]="i === 0"
+            <div class="city-card"
+                 [class.cc-gold]="i===0" [class.cc-silver]="i===1" [class.cc-bronze]="i===2"
+                 [class.cc-active]="selectedCity===city.city"
+                 [style.animation-delay]="(i*.07)+'s'"
                  (click)="filterByCity(city.city)">
-              <span class="city-rank">{{ getMedal(i) }}</span>
-              <span class="city-name">{{ city.city }}</span>
-              <span class="city-elo">{{ city.avg_elo }} avg ELO</span>
-              <span class="city-count">{{ city.count }} игроков</span>
+              <div class="cc-medal">{{ ['♛','♕','♔','♗','♘'][i] }}</div>
+              <div class="cc-pos">{{ getRankLabel(i) }}</div>
+              <div class="cc-name">{{ city.city }}</div>
+              <div class="cc-bar-track">
+                <div class="cc-bar-fill" [style.width.%]="getCityBarWidth(city, cityStats)"></div>
+              </div>
+              <div class="cc-footer">
+                <span>{{ city.avg_elo }} ELO</span>
+                <span>{{ city.count }} игр.</span>
+              </div>
             </div>
           }
         </div>
       </div>
     }
 
-    <div class="filters">
-      <button
-        class="filter-btn"
-        [class.active]="selectedCity === ''"
-        (click)="filterByCity('')">
-        Все города
-      </button>
+    <div class="filters reveal">
+      <button class="filter-btn" [class.active]="selectedCity===''" (click)="filterByCity('')">Все города</button>
       @for (city of cities; track city) {
-        <button
-          class="filter-btn"
-          [class.active]="selectedCity === city"
-          (click)="filterByCity(city)">
-          {{ city }}
-        </button>
+        <button class="filter-btn" [class.active]="selectedCity===city" (click)="filterByCity(city)">{{ city }}</button>
       }
     </div>
 
+    @if (!loading && players.length >= 3) {
+      <div class="podium-3d-wrap reveal">
+        <canvas #podiumCanvas style="width:100%;height:100%;display:block"></canvas>
+        <div class="podium-labels">
+          <div class="pl-item pl-second">
+            <div class="pl-crown">♕</div>
+            <div class="pl-name">{{ players[1]?.username }}</div>
+            <div class="pl-elo">{{ players[1]?.elo }} ELO</div>
+          </div>
+          <div class="pl-item pl-first">
+            <div class="pl-crown pl-crown-gold">♛</div>
+            <div class="pl-name pl-name-gold">{{ players[0]?.username }}</div>
+            <div class="pl-elo pl-elo-gold">{{ players[0]?.elo }} ELO</div>
+          </div>
+          <div class="pl-item pl-third">
+            <div class="pl-crown">♔</div>
+            <div class="pl-name">{{ players[2]?.username }}</div>
+            <div class="pl-elo">{{ players[2]?.elo }} ELO</div>
+          </div>
+        </div>
+        <div class="podium-corner podium-corner-tl"><span class="section-label">ПОДИУМ</span></div>
+        <div class="podium-corner podium-corner-tr"><span class="pc-period">TOP 3 · {{ selectedPeriod === 'all' ? 'ВСЁ ВРЕМЯ' : selectedPeriod === 'month' ? 'МЕСЯЦ' : 'НЕДЕЛЯ' }}</span></div>
+      </div>
+    }
+
     @if (loading) {
-      <div class="loading">Загружаем рейтинг...</div>
+      <div class="lb-loading">
+        <div class="load-ring"></div>
+        <div class="load-piece">♞</div>
+        <p>Загрузка рейтинга…</p>
+      </div>
     } @else {
-      <div class="players-table">
+      <div class="players-table reveal">
         <div class="table-header">
           <span>#</span>
           <span>Игрок</span>
           <span>Город</span>
           <span>ELO</span>
+          <span>Δ ELO</span>
           <span>Победы</span>
           <span>Серия</span>
         </div>
-        @for (player of players; track player.username; let i = $index) {
-          <div class="table-row" [class.top-three]="i < 3">
-            <span class="rank">{{ getMedal(i) }}</span>
-            <span class="username">{{ player.username }}</span>
-            <span class="city">{{ player.city || '—' }}</span>
-            <span class="elo">{{ player.elo }}</span>
-            <span class="wins">{{ player.wins }}</span>
-            <span class="streak">
-              @if (player.streak > 0) {
-                {{ player.streak }}
-              } @else {
-                —
-              }
+
+        @for (player of filteredPlayers; track player.username; let i = $index) {
+          <div class="table-row" [class.top-three]="i < 3" [style.animation-delay]="(i*.03)+'s'">
+            <span class="rank-n" [class.rn-1]="i===0" [class.rn-2]="i===1" [class.rn-3]="i===2">
+              {{ getMedal(i) }}
             </span>
+            <div class="player-cell">
+              <div class="pc-av" [class.av-gold]="i===0">
+                {{ player.username[0].toUpperCase() }}
+                @if (isPlayerOnline(i)) { <span class="av-online"></span> }
+              </div>
+              <div class="pc-info">
+                <span class="pc-name">{{ player.username }}</span>
+                <div class="pc-chips">
+                  @if (player.title)      { <span class="chip chip-title">{{ player.title }}</span> }
+                  @if (isPlayerHot(i))    { <span class="chip chip-hot">HOT</span> }
+                  @if (isPlayerRising(i)) { <span class="chip chip-rise">RISING</span> }
+                  @if (i === 0)           { <span class="chip chip-crown">ЧЕМПИОН</span> }
+                </div>
+              </div>
+            </div>
+            <span class="city-cell">{{ player.city || '—' }}</span>
+            <span class="elo-cell" [class.elo-top]="i===0">{{ player.elo }}</span>
+            <span class="change-cell" [class]="getEloChange(i).cls">
+              {{ getEloChange(i).val !== 0 ? ((getEloChange(i).val > 0 ? '+' : '') + getEloChange(i).val) : '—' }}
+            </span>
+            <span class="wins-cell">{{ player.wins }}</span>
+            <span class="streak-cell">{{ (player.streak || 0) > 0 ? player.streak : '—' }}</span>
+          </div>
+
+          @if (i < 3) {
+            <div class="action-row">
+              <span class="ar-rank-lbl">Место {{ i+1 }}</span>
+              <div class="ar-actions">
+                <button class="btn-watch" (click)="watchPlayer(player.username)">Наблюдать</button>
+                <button class="btn-challenge" (click)="challengePlayer(player.username)">Вызов</button>
+              </div>
+            </div>
+          }
+        }
+
+        @if (filteredPlayers.length === 0) {
+          <div class="empty-state">
+            <span class="empty-piece">♟</span>
+            <p>Игроки не найдены</p>
           </div>
         }
-        @if (players.length === 0) {
-          <div class="empty">Пока нет игроков</div>
-        }
+      </div>
+
+      <div class="improved-section reveal">
+        <div class="section-row">
+          <span class="section-label">ПРОГРЕСС НЕДЕЛИ</span>
+          <span class="section-sub">Наибольший прирост ELO</span>
+        </div>
+        <div class="improved-row">
+          @for (star of risingStars; track star.name; let i = $index) {
+            <div class="imp-card" [style.animation-delay]="(i*.1)+'s'">
+              <div class="imp-pos">0{{ i+1 }}</div>
+              <div class="imp-info">
+                <span class="imp-name">{{ star.name }}</span>
+                <span class="imp-city">{{ star.city }}</span>
+              </div>
+              <div class="imp-gain">
+                <span class="imp-delta">+{{ star.change }}</span>
+                <div class="imp-bar-track">
+                  <div class="imp-bar-fill" [style.width.%]="(star.change / 150 * 100)"></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     }
+
+    <div class="tournament-teaser reveal">
+      <div class="tt-bg-piece">♛</div>
+      <div class="tt-left">
+        <span class="section-label">БЛИЖАЙШИЙ ТУРНИР</span>
+        <h3 class="tt-title">Kazakhstan Open Championship</h3>
+        <p class="tt-desc">Первый открытый чемпионат Казахстана · Призовой фонд 50 000 монет · 128 участников</p>
+        <div class="tt-tags">
+          <span class="tt-tag">Рапид</span>
+          <span class="tt-tag">Swiss System</span>
+          <span class="tt-tag">9 туров</span>
+          <span class="tt-tag">Онлайн</span>
+        </div>
+      </div>
+      <div class="tt-right">
+        <div class="tt-countdown">
+          <div class="tc-unit"><span class="tc-num">{{ cdDays }}</span><span class="tc-lbl">дней</span></div>
+          <div class="tc-sep">:</div>
+          <div class="tc-unit"><span class="tc-num">{{ pad(cdHours) }}</span><span class="tc-lbl">часов</span></div>
+          <div class="tc-sep">:</div>
+          <div class="tc-unit"><span class="tc-num">{{ pad(cdMinutes) }}</span><span class="tc-lbl">минут</span></div>
+          <div class="tc-sep">:</div>
+          <div class="tc-unit"><span class="tc-num">{{ pad(cdSeconds) }}</span><span class="tc-lbl">сек</span></div>
+        </div>
+        <button class="btn-register" (click)="registerTournament()" [disabled]="registered || registerLoading">
+          <span class="btn-shimmer"></span>
+          {{ registered ? 'Вы зарегистрированы' : registerLoading ? 'Подождите...' : 'Зарегистрироваться' }}
+        </button>
+        <p class="tt-spots">Осталось мест: <strong>37 / 128</strong></p>
+      </div>
+    </div>
+
+    <div class="hof-section reveal">
+      <span class="section-label" style="margin-bottom:1.25rem;display:block">ЗАЛА СЛАВЫ · ALL TIME</span>
+      <div class="hof-grid">
+        @for (rec of hofRecords; track rec.title; let i = $index) {
+          <div class="hof-card" [class.hof-gold]="i===0" [style.animation-delay]="(i*.08)+'s'">
+            <span class="hof-piece">{{ rec.piece }}</span>
+            <div class="hof-info">
+              <span class="hof-title">{{ rec.title }}</span>
+              <span class="hof-val">{{ rec.val }}</span>
+              <span class="hof-who">{{ rec.who }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
   </div>
 </div>

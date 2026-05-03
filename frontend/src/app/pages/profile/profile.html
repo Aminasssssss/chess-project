@@ -1,126 +1,310 @@
 <div class="profile-page">
-  <div class="page-header">
-    <div class="container">
-      @if (loading) {
-        <div class="loading">Загружаем профиль...</div>
-      } @else {
-        <div class="header-content">
-          <div class="user-info">
-            <div class="avatar">
+
+  <!-- Ambient bg -->
+  <div class="pp-ambient">
+    <span class="pa" style="left:2%;top:8%;font-size:7rem;--d:9s;--del:0s;--r:-8deg;--y:-25px">♔</span>
+    <span class="pa" style="right:3%;top:12%;font-size:5rem;--d:11s;--del:2s;--r:6deg;--y:-18px">♛</span>
+    <span class="pa" style="left:3%;bottom:10%;font-size:4rem;--d:8s;--del:1s;--r:4deg;--y:-20px">♟</span>
+    <span class="pa" style="right:4%;bottom:15%;font-size:6rem;--d:7s;--del:3s;--r:-5deg;--y:-22px">♞</span>
+  </div>
+  <div class="pp-orb po1"></div>
+  <div class="pp-orb po2"></div>
+  <div class="pp-scan"></div>
+
+  @if (loading) {
+    <div class="profile-loading">
+      <div class="pl-ring"></div>
+      <div class="pl-piece">♟</div>
+    </div>
+  }
+
+  @if (!loading && profile) {
+
+    <!-- ══ HEADER ══ -->
+    <div class="profile-header">
+      <div class="ph-inner">
+
+        <div class="ph-left">
+          <div class="avatar-wrap">
+            <div class="avatar" [class.av-pro]="profile.is_pro">
               {{ profile.username[0].toUpperCase() }}
             </div>
-            <div class="user-details">
-              <span class="section-label">ПРОФИЛЬ</span>
+            @if (profile.is_pro) {
+              <span class="pro-crown">♛</span>
+            }
+            <div class="av-ring"></div>
+          </div>
+
+          <div class="ph-info">
+            <div class="ph-name-row">
               <h1>{{ profile.username }}</h1>
-              <div class="user-meta">
-                <span class="elo-badge">{{ profile.elo }} ELO</span>
-                @if (profile.is_pro) {
-                  <span class="pro-badge">PRO</span>
-                }
-                @if (profile.city) {
-                  <span class="city-badge">{{ profile.city }}</span>
-                }
+              @if (profile.title) {
+                <span class="user-title">{{ profile.title }}</span>
+              }
+            </div>
+            <div class="ph-chips">
+              <span class="chip-elo">{{ profile.elo }} ELO</span>
+              <span class="chip-rank">{{ getRank().icon }} {{ getRank().name }}</span>
+              @if (profile.city) { <span class="chip-city">{{ profile.city }}</span> }
+              @if (profile.is_pro) { <span class="chip-pro">PRO</span> }
+            </div>
+            <div class="rank-prog">
+              <div class="rp-bar">
+                <div class="rp-fill" [style.width.%]="getRankProgress()"></div>
               </div>
+              <span class="rp-lbl">
+                {{ getRankProgress() }}% до {{ getNextRank()?.name || 'максимума' }}
+              </span>
             </div>
           </div>
-          <div class="header-actions">
-            @if (!profile.is_pro) {
-              <button class="btn-upgrade" (click)="showProModal = true">
-                Upgrade to Pro — 500 монет
-              </button>
-            }
-            <button class="btn-secondary" (click)="logout()">
-              Выйти
-            </button>
+        </div>
+
+        <div class="ph-right">
+          <div class="coins-big">
+            <span class="cb-icon">◈</span>
+            <span class="cb-num">{{ profile.coins }}</span>
+            <span class="cb-lbl">монет</span>
           </div>
+          @if (!profile.is_pro) {
+            <button class="btn-upgrade" (click)="showProModal=true">
+              <span class="bu-shimmer"></span>
+              Upgrade to Pro
+            </button>
+          }
+          <button class="btn-logout" (click)="logout()">Выйти</button>
         </div>
 
-        @if (upgradeMsg) {
-          <div class="upgrade-msg">{{ upgradeMsg }}</div>
-        }
-      }
+      </div>
     </div>
-  </div>
 
-  @if (!loading) {
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.elo }}</span>
-          <span class="stat-label">ELO рейтинг</span>
+    <div class="profile-body">
+
+      <!-- ══ DAILY STREAK ══ -->
+      <div class="daily-card">
+        <div class="dc-left">
+          <span class="dc-label">ЕЖЕДНЕВНЫЙ БОНУС</span>
+          <div class="dc-days">
+            @for (active of getDailyStreakDays(); track $index; let i=$index) {
+              <div class="dc-day" [class.dd-on]="active" [class.dd-today]="i===(profile.daily_login_streak%7)-1">
+                <span class="dd-n">{{ i+1 }}</span>
+                <span class="dd-c">◈</span>
+              </div>
+            }
+          </div>
+          <p class="dc-info">Серия: {{ profile.daily_login_streak }} дней · Бонус растёт каждый день</p>
         </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.wins }}</span>
-          <span class="stat-label">Победы</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ getWinRate() }}%</span>
-          <span class="stat-label">Винрейт</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.streak }}</span>
-          <span class="stat-label">Серия побед</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.coins }}</span>
-          <span class="stat-label">Монеты</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.max_streak }}</span>
-          <span class="stat-label">Лучшая серия</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.puzzle_best_score || 0 }}</span>
-          <span class="stat-label">Рекорд Puzzle</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">{{ profile.puzzles_solved_total || 0 }}</span>
-          <span class="stat-label">Задач решено</span>
+        <div class="dc-right">
+          @if (bonusMsg) {
+            <div class="dc-bonus-msg" [class.claimed]="bonusMsg.includes('Уже')">{{ bonusMsg }}</div>
+          }
+          <button class="btn-bonus" (click)="claimDailyBonus()" [disabled]="bonusClaiming">
+            <span class="bb-shimmer"></span>
+            {{ bonusClaiming ? 'Получаем...' : 'Получить бонус' }}
+          </button>
         </div>
       </div>
 
+      <!-- ══ STATS GRID ══ -->
+      <div class="stats-grid">
+        @for (s of statCards; track s.label) {
+          <div class="stat-card" [class.sc-gold]="s.gold">
+            <span class="sc-ico">{{ s.icon }}</span>
+            <span class="sc-num stat-num-animate" [attr.data-target]="s.value">{{ s.value }}</span>
+            <span class="sc-lbl">{{ s.label }}</span>
+            @if (s.sub) { <span class="sc-sub">{{ s.sub }}</span> }
+          </div>
+        }
+      </div>
+
+      <!-- ══ ELO GRAPH + WLD ══ -->
+      <div class="charts-row">
+
+        <div class="elo-graph-card">
+          <span class="card-label">ИСТОРИЯ ELO</span>
+          @if (eloHistory.length > 1) {
+            <div class="eg-wrap">
+              <svg viewBox="0 0 600 120" preserveAspectRatio="none" class="eg-svg">
+                <defs>
+                  <linearGradient id="eloGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path [attr.d]="getEloFillPath()" fill="url(#eloGrad)"/>
+                <path [attr.d]="getEloSvgPath()" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="elo-path"/>
+                @for (dot of getEloDots(); track $index) {
+                  <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="3" fill="#c9a84c" opacity="0.6"/>
+                }
+              </svg>
+              <div class="eg-labels">
+                <span>{{ eloHistory[0]?.elo }}</span>
+                <span class="eg-current">{{ profile.elo }} ELO</span>
+              </div>
+            </div>
+          } @else {
+            <div class="eg-empty">Сыграй партии чтобы увидеть график</div>
+          }
+        </div>
+
+        <div class="wld-card">
+          <span class="card-label">СТАТИСТИКА ПАРТИЙ</span>
+          <div class="wld-rows">
+            <div class="wld-row">
+              <span class="wl-lbl">Победы</span>
+              <div class="wl-track"><div class="wl-fill wl-w" [style.width]="getWinRate()+'%'"></div></div>
+              <span class="wl-num">{{ profile.wins }}</span>
+            </div>
+            <div class="wld-row">
+              <span class="wl-lbl">Поражения</span>
+              <div class="wl-track"><div class="wl-fill wl-l" [style.width]="getLossRate()+'%'"></div></div>
+              <span class="wl-num">{{ profile.losses }}</span>
+            </div>
+            <div class="wld-row">
+              <span class="wl-lbl">Ничьи</span>
+              <div class="wl-track"><div class="wl-fill wl-d" [style.width]="getDrawRate()+'%'"></div></div>
+              <span class="wl-num">{{ profile.draws }}</span>
+            </div>
+          </div>
+
+          <!-- Donut chart -->
+          <div class="donut-wrap">
+            <svg viewBox="0 0 100 100" class="donut-svg">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(201,168,76,.08)" stroke-width="12"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#4caf7d" stroke-width="12"
+                      [attr.stroke-dasharray]="getWinRate()*2.39+' 239'"
+                      stroke-dashoffset="0" stroke-linecap="round"
+                      transform="rotate(-90 50 50)"/>
+            </svg>
+            <div class="donut-center">
+              <span class="dc-pct">{{ getWinRate() }}%</span>
+              <span class="dc-lbl">победы</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ QUICK TIP ══ -->
+      <div class="tip-card">
+        <div class="tc-head">
+          <span class="card-label">СОВЕТ AI ТРЕНЕРА</span>
+          <button class="tc-btn" (click)="loadQuickTip()" [disabled]="loadingTip">
+            {{ loadingTip ? '...' : 'Новый совет' }}
+          </button>
+        </div>
+        @if (quickTip) {
+          <p class="tc-text">"{{ quickTip }}"</p>
+        } @else {
+          <p class="tc-ph">Нажми "Новый совет" — AI даст персональный совет</p>
+        }
+      </div>
+
+      <!-- ══ RIVAL ══ -->
+      @if (rival) {
+        <div class="rival-card">
+          <span class="card-label">ГЛАВНЫЙ СОПЕРНИК</span>
+          <div class="rc-inner">
+            <span class="rc-piece">♚</span>
+            <div>
+              <h3>{{ rival }}</h3>
+              <p>Проиграл {{ rivalLosses }} {{ rivalLosses===1?'раз':'раза' }} этому игроку</p>
+            </div>
+            <a routerLink="/leaderboard" class="rc-link">Найти в рейтинге →</a>
+          </div>
+        </div>
+      }
+
+      <!-- ══ EXTENDED STATS ══ -->
+      @if (extendedStats) {
+        <div class="extended-grid">
+          <div class="ext-card">
+            <span class="card-label">ЛУЧШЕЕ ВРЕМЯ</span>
+            <div class="ext-big">{{ extendedStats.best_hour !== null ? extendedStats.best_hour + ':00' : '—' }}</div>
+            <p>Винрейт {{ extendedStats.best_hour_win_rate }}% в это время</p>
+          </div>
+          <div class="ext-card">
+            <span class="card-label">СРЕДНЕЕ ВРЕМЯ ПАРТИИ</span>
+            <div class="ext-big">{{ formatDuration(extendedStats.avg_duration_seconds) }}</div>
+            <p>По последним {{ extendedStats.total_games }} партиям</p>
+          </div>
+          <div class="ext-card">
+            <span class="card-label">ОБЩЕЕ ВРЕМЯ ИГРЫ</span>
+            <div class="ext-big">{{ formatDuration(profile.total_playtime) }}</div>
+            <p>За всё время в Chess Arena KZ</p>
+          </div>
+          <div class="ext-card">
+            <span class="card-label">ЛЮБИМЫЙ ДЕБЮТ</span>
+            <div class="ext-big ext-sm">{{ extendedStats.top_openings?.[0]?.name || 'е4' }}</div>
+            @if (extendedStats.top_openings?.[0]) {
+              <p>Винрейт {{ extendedStats.top_openings[0].win_rate }}% в этом дебюте</p>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══ OPENING REPERTOIRE ══ -->
+      @if (extendedStats?.top_openings?.length) {
+        <div class="openings-card">
+          <span class="card-label">РЕПЕРТУАР ДЕБЮТОВ</span>
+          <div class="op-list">
+            @for (o of extendedStats.top_openings; track o.name) {
+              <div class="op-row">
+                <span class="op-name">{{ o.name }}</span>
+                <div class="op-track">
+                  <div class="op-fill" [style.width]="o.win_rate+'%'"></div>
+                </div>
+                <span class="op-wr">{{ o.win_rate }}%</span>
+                <span class="op-cnt">{{ o.count }} партий</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══ TABS ══ -->
       <div class="tabs">
-        <button class="tab" [class.active]="activeTab === 'stats'" (click)="activeTab = 'stats'">
-          История игр
-        </button>
-        <button class="tab" [class.active]="activeTab === 'achievements'" (click)="activeTab = 'achievements'">
-          Достижения
-        </button>
-        <button class="tab" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
-          Настройки
-        </button>
+        <button class="tab" [class.active]="activeTab==='stats'"        (click)="activeTab='stats'">История игр</button>
+        <button class="tab" [class.active]="activeTab==='achievements'" (click)="activeTab='achievements'">Достижения</button>
+        <button class="tab" [class.active]="activeTab==='settings'"     (click)="activeTab='settings'">Настройки</button>
       </div>
 
       @if (activeTab === 'stats') {
         <div class="games-list">
-          @for (game of games; track game.id) {
-            <div class="game-row" [class]="game.result">
-              <span class="game-opponent">vs {{ game.opponent }}</span>
-              <span class="game-color">{{ game.player_color === 'white' ? 'Белые' : 'Чёрные' }}</span>
-              <span class="game-result">
-                {{ game.result === 'white' ? 'Победа' : game.result === 'draw' ? 'Ничья' : 'Поражение' }}
-              </span>
-              <span class="game-date">{{ game.created_at | date:'dd.MM.yyyy' }}</span>
+          @for (game of games; track game.id; let i=$index) {
+            <div class="game-row" [style.animation-delay]="(i*.04)+'s'">
+              <div class="gr-left">
+                <span class="gr-result" [class]="game.result">
+                  {{ game.result==='white'?'Победа':game.result==='draw'?'Ничья':'Поражение' }}
+                </span>
+                <span class="gr-opp">vs {{ game.opponent }}</span>
+                @if (game.opening_name) {
+                  <span class="gr-opening">{{ game.opening_name }}</span>
+                }
+              </div>
+              <div class="gr-right">
+                <span class="gr-color">{{ game.player_color==='white'?'♔ Белые':'♚ Чёрные' }}</span>
+                <span class="gr-date">{{ game.created_at | date:'dd.MM.yy' }}</span>
+              </div>
             </div>
           }
-          @if (games.length === 0) {
-            <div class="empty">Сыграй первую партию!</div>
-          }
+          @if (games.length===0) { <div class="empty-state">Сыграй первую партию!</div> }
         </div>
       }
 
       @if (activeTab === 'achievements') {
         <div class="achievements-grid">
-          @for (ach of achievements; track ach.id) {
-            <div class="achievement-card">
-              <span class="ach-icon">{{ ach.icon }}</span>
-              <h3>{{ ach.title }}</h3>
-              <p>{{ ach.description }}</p>
+          @for (ach of achievements; track ach.id; let i=$index) {
+            <div class="ach-card" [style.animation-delay]="(i*.06)+'s'">
+              <div class="ac-glow"></div>
+              <span class="ac-ico">{{ ach.icon }}</span>
+              <div class="ac-info">
+                <h4>{{ ach.title }}</h4>
+                <p>{{ ach.description }}</p>
+                <span class="ac-date">{{ ach.earned_at | date:'dd.MM.yyyy' }}</span>
+              </div>
             </div>
           }
-          @if (achievements.length === 0) {
-            <div class="empty">Достижения появятся после игр</div>
-          }
+          @if (achievements.length===0) { <div class="empty-state">Достижения появятся после игр</div> }
         </div>
       }
 
@@ -130,73 +314,47 @@
             <label>Город</label>
             <select [(ngModel)]="editCity">
               <option value="">Выбери город</option>
-              <option value="Алматы">Алматы</option>
-              <option value="Астана">Астана</option>
-              <option value="Шымкент">Шымкент</option>
-              <option value="Қарағанды">Қарағанды</option>
-              <option value="Ақтобе">Ақтобе</option>
-              <option value="Тараз">Тараз</option>
-              <option value="Павлодар">Павлодар</option>
-              <option value="Өскемен">Өскемен</option>
+              @for (city of ['Алматы','Астана','Шымкент','Қарағанды','Ақтобе','Тараз','Павлодар','Өскемен']; track city) {
+                <option [value]="city">{{ city }}</option>
+              }
             </select>
           </div>
-          <button class="btn-primary" (click)="saveCity()">
-            Сохранить
-          </button>
+          @if (upgradeMsg) { <div class="upgrade-msg">{{ upgradeMsg }}</div> }
+          <button class="btn-primary" (click)="saveCity()">Сохранить</button>
         </div>
       }
+
     </div>
   }
 </div>
 
-
+<!-- PRO MODAL -->
 @if (showProModal) {
-  <div class="modal-overlay" (click)="showProModal = false">
-    <div class="modal-card" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <span class="pro-crown">♛</span>
+  <div class="modal-overlay" (click)="showProModal=false">
+    <div class="pro-modal" (click)="$event.stopPropagation()">
+      <div class="pm-header">
+        <span class="pm-crown">♛</span>
         <h2>Chess Arena Pro</h2>
         <p>Открой полный доступ ко всем возможностям</p>
       </div>
-      <div class="modal-perks">
-        <div class="perk-item">
-          <div class="perk-dot"></div>
-          <div>
-            <strong>Кастомные скины доски</strong>
-            <span>Эксклюзивные темы только для Pro</span>
+      <div class="pm-perks">
+        @for (p of proPerks; track p.t) {
+          <div class="perk">
+            <span class="pk-icon">{{ p.icon }}</span>
+            <div>
+              <strong>{{ p.t }}</strong>
+              <span>{{ p.d }}</span>
+            </div>
           </div>
-        </div>
-        <div class="perk-item">
-          <div class="perk-dot"></div>
-          <div>
-            <strong>Детальная аналитика</strong>
-            <span>График ELO, разбор каждого хода</span>
-          </div>
-        </div>
-        <div class="perk-item">
-          <div class="perk-dot"></div>
-          <div>
-            <strong>AI Coach без лимитов</strong>
-            <span>Неограниченный разбор партий</span>
-          </div>
-        </div>
-        <div class="perk-item">
-          <div class="perk-dot"></div>
-          <div>
-            <strong>Приоритет в турнирах</strong>
-            <span>Ранний доступ и бонусные монеты</span>
-          </div>
-        </div>
+        }
       </div>
-      <div class="modal-footer">
-        <div class="price-row">
-          <span class="price">500 монет</span>
-          <span class="price-sub">единоразово, навсегда</span>
+      <div class="pm-footer">
+        <div class="pm-price">
+          <span class="pm-n">◈ 500</span>
+          <span class="pm-sub">монет · единоразово · навсегда</span>
         </div>
-        <a routerLink="/pricing" class="btn-primary modal-btn" (click)="showProModal = false">
-          Получить Pro
-        </a>
-        <button class="btn-cancel" (click)="showProModal = false">Отмена</button>
+        <button class="btn-primary" (click)="upgradeToPro();showProModal=false">Получить Pro</button>
+        <button class="btn-cancel" (click)="showProModal=false">Отмена</button>
       </div>
     </div>
   </div>

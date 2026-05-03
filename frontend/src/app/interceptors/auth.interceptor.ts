@@ -16,7 +16,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 401) {
         const refresh = localStorage.getItem('refresh');
         if (refresh) {
-          return http.post('https://chess-project-5-anui.onrender.com/api/auth/refresh/', { refresh }).pipe(
+          return http.post('https://shess-project.onrender.com/api/auth/refresh/', { refresh }).pipe(
             switchMap((data: any) => {
               localStorage.setItem('access', data.access);
               const retryReq = req.clone({

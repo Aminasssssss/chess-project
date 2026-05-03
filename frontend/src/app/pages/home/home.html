@@ -1,101 +1,561 @@
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="container">
-    <div class="hero-content">
-      <span class="hero-label">Chess Arena KZ</span>
-      <h1>
-        Шахматы на<br>
-        <span class="accent">новом уровне</span>
-      </h1>
-      <p class="hero-desc">
-        Играй против AI, соревнуйся с друзьями,<br>
-        получай разбор партий от искусственного интеллекта
-      </p>
-      <div class="hero-actions">
-        <a routerLink="/play" class="btn-primary">Начать игру</a>
-        <a routerLink="/leaderboard" class="btn-secondary">Kazakhstan League</a>
-      </div>
+<div class="home-wrap">
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero" #heroSection>
+
+    <!-- Particle canvas -->
+    <canvas #particleCanvas class="p-canvas"></canvas>
+
+    <!-- 3D floating pieces — весь экран -->
+    <app-floating-pieces></app-floating-pieces>
+
+    <!-- Gradient orbs -->
+    <div class="hero-orb ho1"></div>
+    <div class="hero-orb ho2"></div>
+    <div class="hero-orb ho3"></div>
+    <div class="hero-orb ho4"></div>
+
+    <!-- Gold beams -->
+    <div class="beam bm1"></div>
+    <div class="beam bm2"></div>
+    <div class="beam bm3"></div>
+    <div class="beam bm4"></div>
+
+    <!-- Scan sweep -->
+    <div class="scan-sweep"></div>
+
+    <!-- Chess grid bg -->
+    <div class="chess-grid-bg">
+      @for (row of rows; track row) {
+        <div class="cgb-row">
+          @for (col of cols; track col) {
+            <div class="cgb-sq" [class.cgb-lit]="(row+col)%2===0"></div>
+          }
+        </div>
+      }
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <span class="stat-num">1200</span>
-        <span class="stat-label">Стартовый ELO</span>
+
+    <!-- Rotating rings decoration -->
+    <div class="deco-ring r1"></div>
+    <div class="deco-ring r2"></div>
+    <div class="deco-ring r3"></div>
+
+    <!-- Corner chess pieces decoration -->
+    <div class="corner-deco cd-tl">♔</div>
+    <div class="corner-deco cd-tr">♛</div>
+    <div class="corner-deco cd-bl">♟</div>
+    <div class="corner-deco cd-br">♞</div>
+
+    <!-- HERO LAYOUT -->
+    <div class="hero-layout">
+
+      <!-- LEFT TEXT -->
+      <div class="hero-text">
+
+        <!-- Eyebrow -->
+        <div class="eyebrow">
+          <span class="e-dot"></span>
+          <span class="e-t">Chess Arena KZ</span>
+          <span class="e-sep">·</span>
+          <span class="e-t">Kazakhstan League</span>
+          <span class="e-sep">·</span>
+          <span class="e-live">{{ stats[0].current }}+ онлайн</span>
+        </div>
+
+        <!-- Main title -->
+        <h1 class="big-title">
+          <span class="bt-outline">ШАХМАТЫ</span>
+          <span class="bt-center">
+          <span class="bt-rule"></span>
+          <em class="bt-italic">нового</em>
+          <span class="bt-rule"></span>
+        </span>
+          <span class="bt-solid">УРОВНЯ<span class="bt-dot">.</span></span>
+        </h1>
+
+        <!-- Feature pills -->
+        <div class="feat-pills">
+          @for (f of features; track f) {
+            <span class="fp-pill">{{ f }}</span>
+          }
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="hero-actions">
+          <a routerLink="/play" class="btn-main">
+            <span class="btn-shimmer"></span>
+            <span>Начать игру</span>
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+              <path d="M3 8.5h11M9 4l4.5 4.5L9 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a routerLink="/leaderboard" class="btn-ghost">Kazakhstan League →</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          @for (s of stats; track s.label) {
+            <div class="hs">
+              <div class="hs-val">{{ s.current | number:'1.0-0' }}{{ s.suffix }}</div>
+              <div class="hs-lbl">{{ s.label }}</div>
+            </div>
+          }
+        </div>
+
+        <!-- Mini progress bars decorative -->
+        <div class="mini-bars">
+          <div class="mb-row">
+            <span>Алматы</span>
+            <div class="mb-track"><div class="mb-fill" style="--w:92%"></div></div>
+            <span>1387</span>
+          </div>
+          <div class="mb-row">
+            <span>Астана</span>
+            <div class="mb-track"><div class="mb-fill" style="--w:78%"></div></div>
+            <span>1342</span>
+          </div>
+          <div class="mb-row">
+            <span>Шымкент</span>
+            <div class="mb-track"><div class="mb-fill" style="--w:64%"></div></div>
+            <span>1298</span>
+          </div>
+        </div>
+
       </div>
-      <div class="stat">
-        <span class="stat-num">5</span>
-        <span class="stat-label">Уровней сложности</span>
+
+      <!-- RIGHT: 3D BOARD -->
+      <div class="hero-board-zone">
+        <div class="gblob g1"></div>
+        <div class="gblob g2"></div>
+        <div class="gblob g3"></div>
+
+        <!-- Board glow ring -->
+        <div class="board-glow-ring"></div>
+
+        <div class="board-3d-container">
+          <app-chess-three-d></app-chess-three-d>
+        </div>
+
+        <!-- Chips -->
+        <div class="fchip fc1" [class.fc-ani]="chipsVisible">
+          <div class="fch-ico">♟</div>
+          <div class="fch-label">MOVE</div>
+          <div class="fch-val">{{ currentMove }}</div>
+        </div>
+        <div class="fchip fc2" [class.fc-ani]="chipsVisible">
+          <div class="fch-ico">%</div>
+          <div class="fch-label">WIN</div>
+          <div class="fch-val">{{ winPct }}%</div>
+        </div>
+        <div class="fchip fc3" [class.fc-ani]="chipsVisible">
+          <div class="fch-ico">♔</div>
+          <div class="fch-label">ELO</div>
+          <div class="fch-val">1247</div>
+        </div>
+        <div class="fchip fc4" [class.fc-ani]="chipsVisible">
+          <div class="fch-ico">∞</div>
+          <div class="fch-label">DEPTH</div>
+          <div class="fch-val">18</div>
+        </div>
+
+        <!-- Win prob mini bar -->
+        <div class="win-prob-chip" [class.fc-ani]="chipsVisible">
+          <div class="wpc-label">WIN PROBABILITY</div>
+          <div class="wpc-bar">
+            <div class="wpc-fill" [style.width]="animatedWin+'%'"></div>
+          </div>
+          <div class="wpc-nums">
+            <span>W {{ animatedWin }}%</span>
+            <span>B {{ 100-animatedWin }}%</span>
+          </div>
+        </div>
+
+        <!-- Live badge -->
+        <div class="live-badge">
+          <span class="lb-dot"></span>
+          <span>Live game in progress</span>
+        </div>
       </div>
-      <div class="stat">
-        <span class="stat-num">AI</span>
-        <span class="stat-label">Разбор партий</span>
-      </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-ind">
+      <div class="si-m"><div class="si-w"></div></div>
+      <span>SCROLL</span>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ TICKER ══════════════ -->
+  <div class="ticker-strip">
+    <div class="ts-inner">
+      @for (t of tickerItems; track t) {
+        <span class="ts-t">{{ t }}</span>
+        <span class="ts-sep">♟</span>
+      }
+      @for (t of tickerItems; track t) {
+        <span class="ts-t">{{ t }}</span>
+        <span class="ts-sep">♟</span>
+      }
     </div>
   </div>
-</section>
 
-<section class="modes section">
-  <div class="container">
-    <span class="section-label">РЕЖИМЫ ИГРЫ</span>
-    <h2>Выбери формат</h2>
-    <div class="modes-grid">
-      <a routerLink="/play" class="mode-card">
-        <span class="mode-num">01</span>
-        <h3>Против AI</h3>
-        <p>Minimax алгоритм с 5 уровнями сложности. От новичка до гроссмейстера.</p>
-        <span class="mode-arrow">→</span>
-      </a>
-      <a routerLink="/play/multiplayer" class="mode-card">
-        <span class="mode-num">02</span>
-        <h3>Мультиплеер</h3>
-        <p>Создай комнату и отправь ссылку другу. Играй в реальном времени.</p>
-        <span class="mode-arrow">→</span>
-      </a>
-      <a routerLink="/puzzle" class="mode-card">
-        <span class="mode-num">03</span>
-        <h3>Puzzle Rush</h3>
-        <p>Реши максимум задач за 5 минут. Тренируй тактику.</p>
-        <span class="mode-arrow">→</span>
-      </a>
+  <!-- ══════════════ MODES ══════════════ -->
+  <section class="modes-sec">
+    <div class="ms-inner">
+      <div class="ms-head reveal">
+        <span class="s-label">РЕЖИМЫ ИГРЫ</span>
+        <h2 class="s-h2">Выбери <em>формат</em></h2>
+        <p>Три способа играть — каждый со своей механикой и призами</p>
+      </div>
+
+      <div class="modes-grid">
+
+        <a routerLink="/play" class="mc reveal">
+          <div class="mc-bg-piece">♟</div>
+          <div class="mc-accent"></div>
+          <div class="mc-top">
+            <span class="mc-n">01</span>
+            <div class="mc-ico-wrap">♟</div>
+          </div>
+          <h3>Против AI</h3>
+          <p>Stockfish · 5 уровней · Win probability · AI разбор · Opening detector · Кастом темы</p>
+          <div class="mc-tags">
+            <span>Stockfish</span><span>5 уровней</span><span>Win ML</span><span>Opening</span>
+          </div>
+          <div class="mc-footer">
+            <div class="mc-bar-wrap"><div class="mc-bar"></div></div>
+            <span class="mc-go">Играть →</span>
+          </div>
+          <div class="mc-glow"></div>
+        </a>
+
+        <a routerLink="/play/multiplayer" class="mc reveal">
+          <div class="mc-bg-piece">♞</div>
+          <div class="mc-accent"></div>
+          <div class="mc-top">
+            <span class="mc-n">02</span>
+            <div class="mc-ico-wrap">♞</div>
+          </div>
+          <h3>Мультиплеер</h3>
+          <p>WebSocket · Реальное время · Комната по ссылке · История ходов · Таймер · Ничья</p>
+          <div class="mc-tags">
+            <span>WebSocket</span><span>Real-time</span><span>PvP</span><span>Timer</span>
+          </div>
+          <div class="mc-footer">
+            <div class="mc-bar-wrap"><div class="mc-bar"></div></div>
+            <span class="mc-go">Сыграть →</span>
+          </div>
+          <div class="mc-glow"></div>
+        </a>
+
+        <a routerLink="/puzzle" class="mc reveal">
+          <div class="mc-bg-piece">♜</div>
+          <div class="mc-accent"></div>
+          <div class="mc-top">
+            <span class="mc-n">03</span>
+            <div class="mc-ico-wrap">♜</div>
+          </div>
+          <h3>Puzzle Rush</h3>
+          <p>5 минут · Combo · Монеты · Рекорд · Fire серия · Личный лучший результат</p>
+          <div class="mc-tags">
+            <span>5 минут</span><span>Combo x3</span><span>Монеты</span><span>Рекорд</span>
+          </div>
+          <div class="mc-footer">
+            <div class="mc-bar-wrap"><div class="mc-bar"></div></div>
+            <span class="mc-go">Решать →</span>
+          </div>
+          <div class="mc-glow"></div>
+        </a>
+
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="features section dark-section">
-  <div class="container">
-    <span class="section-label">ВОЗМОЖНОСТИ</span>
-    <h2>Больше чем просто шахматы</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-tag">AI COACH</span>
-        <h3>Разбор как гроссмейстер</h3>
-        <p>После партии AI анализирует каждый ход и объясняет где ты ошибся и как сыграть лучше.</p>
+  <!-- ══════════════ SHOWCASE AI COACH ══════════════ -->
+  <section class="showcase-sec">
+    <div class="showcase-inner">
+
+      <div class="sc-left reveal">
+        <span class="s-label">AI ТРЕНЕР</span>
+        <h2 class="sc-h2">Разбор как<br><em>гроссмейстер</em></h2>
+        <p>После партии AI анализирует каждый ход — стиль игры, ошибки, сильные стороны и конкретный план роста.</p>
+        <a routerLink="/coach" class="sc-btn">Открыть тренера →</a>
+        <div class="sc-chips">
+          @for (c of coachPills; track c) {
+            <span>{{ c }}</span>
+          }
+        </div>
       </div>
-      <div class="feature-card">
-        <span class="feature-tag">LIVE ML</span>
-        <h3>Вероятность победы</h3>
-        <p>ML модель считает шансы после каждого хода в реальном времени. Как в спортивных трансляциях.</p>
+
+      <div class="sc-right reveal">
+        <div class="coach-card">
+          <div class="cc-header">
+            <div class="cc-dot"></div>
+            <span>AI Coach · Анализ партии</span>
+            <span class="cc-live">LIVE</span>
+          </div>
+          <div class="cc-body">
+            <div class="cc-radar">
+              <svg viewBox="0 0 180 180">
+                @for (r of [.2,.4,.6,.8,1]; track r) {
+                  <polygon [attr.points]="hexPts(90,90,80*r)" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="1"/>
+                }
+                <polygon [attr.points]="radarPts" fill="rgba(201,168,76,0.15)" stroke="#c9a84c" stroke-width="1.5"/>
+                @for (pt of radarDots; track $index) {
+                  <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="3.5" fill="#c9a84c"/>
+                }
+                @for (l of radarLabels; track l.text) {
+                  <text [attr.x]="l.x" [attr.y]="l.y" text-anchor="middle" dominant-baseline="middle"
+                        style="fill:#6a6050;font-size:9px;font-family:Inter,sans-serif">{{ l.text }}</text>
+                }
+              </svg>
+            </div>
+            <div class="cc-stats">
+              @for (row of coachStats; track row.l) {
+                <div class="cc-sr">
+                  <span>{{ row.l }}</span>
+                  <div class="cc-bw"><div class="cc-bf" [style.width]="row.v+'%'"></div></div>
+                  <span>{{ row.v }}</span>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="cc-secs">
+            <div class="cc-sec">
+              <span class="cc-sl">СТИЛЬ</span>
+              <span class="cc-sv">Агрессивный</span>
+            </div>
+            <div class="cc-sec cc-hl">
+              <span class="cc-sl">СОВЕТ</span>
+              <span class="cc-sv">"Контролируй центр до атаки"</span>
+            </div>
+            <div class="cc-sec">
+              <span class="cc-sl">ELO ПРОГНОЗ</span>
+              <div class="cc-elo">
+                <span>1247</span>
+                <svg width="36" height="10" viewBox="0 0 36 10">
+                  <path d="M0 5h28M20 1.5l7 3.5-7 3.5" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                </svg>
+                <span class="cc-etarget">1397</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="feature-card">
-        <span class="feature-tag">KAZAKHSTAN LEAGUE</span>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ BENTO ══════════════ -->
+  <section class="bento-sec">
+    <div class="bento-head reveal">
+      <div>
+        <span class="s-label">ВОЗМОЖНОСТИ</span>
+        <h2 class="s-h2">Всё что нужно<br>для <em>роста</em></h2>
+      </div>
+      <p>Каждая фича работает — не просто красиво, а реально полезно</p>
+    </div>
+
+    <div class="bento-grid">
+
+      <!-- Kazakhstan League — wide -->
+      <div class="bc bc-wide reveal">
+        <span class="bc-deco">♔</span>
+        <span class="bc-tag">KAZAKHSTAN LEAGUE</span>
         <h3>Алматы vs Астана</h3>
-        <p>Выбери свой город и соревнуйся в командном зачёте. Лидерборд обновляется в реальном времени.</p>
+        <p>Командный рейтинг по городам Казахстана. Выбери свой город и соревнуйся в командном зачёте.</p>
+        <div class="city-bars">
+          @for (c of cityData; track c.name; let i = $index) {
+            <div class="cb-r">
+              <span class="cb-pos">{{ i+1 }}</span>
+              <span class="cb-city">{{ c.name }}</span>
+              <div class="cb-track">
+                <div class="cb-fill" [style.width]="c.w+'%'" [style.animation-delay]="(i*.12)+'s'"></div>
+              </div>
+              <span class="cb-elo">{{ c.elo }}</span>
+            </div>
+          }
+        </div>
+        <a routerLink="/leaderboard" class="bc-link">Смотреть рейтинг →</a>
       </div>
-      <div class="feature-card">
-        <span class="feature-tag">ГЕЙМИФИКАЦИЯ</span>
-        <h3>Chess Streak</h3>
-        <p>Серия побед открывает достижения и монеты. Монеты тратишь на Pro доступ и скины.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="cta section">
-  <div class="container">
-    <h2>Готов сыграть?</h2>
-    <p>Зарегистрируйся и получи 100 монет на старте</p>
-    <div class="cta-actions">
-      <a routerLink="/register" class="btn-primary">Создать аккаунт</a>
-      <a routerLink="/play" class="btn-secondary">Играть без регистрации</a>
+      <!-- Win Probability -->
+      <div class="bc reveal">
+        <span class="bc-deco">♕</span>
+        <span class="bc-tag">WIN PROBABILITY</span>
+        <h3>Live ML после каждого хода</h3>
+        <p>Как в спортивных трансляциях — шансы пересчитываются мгновенно.</p>
+        <div class="prob-vis">
+          <div class="pv-bar">
+            <div class="pv-w" [style.width]="animatedWin+'%'"></div>
+            <div class="pv-b"></div>
+          </div>
+          <div class="pv-lbl">
+            <span>Белые {{ animatedWin }}%</span>
+            <span>Чёрные {{ 100-animatedWin }}%</span>
+          </div>
+          <div class="pv-hist">
+            @for (v of winHistory; track $index; let last=$last) {
+              <div class="pvh" [class.pvh-last]="last" [style.height]="v+'%'"></div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranks -->
+      <div class="bc reveal">
+        <span class="bc-deco">♗</span>
+        <span class="bc-tag">СИСТЕМА РАНГОВ</span>
+        <h3>ELO и ранги</h3>
+        <p>От Новичка до Гроссмейстера — расти с каждой партией.</p>
+        <div class="rank-list">
+          @for (r of rankFlow; track r.n) {
+            <div class="rl-item" [class.rl-active]="r.active">
+              <span class="rl-ico">{{ r.icon }}</span>
+              <span class="rl-name">{{ r.n }}</span>
+              <span class="rl-range">{{ r.range }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Daily bonus -->
+      <div class="bc reveal">
+        <span class="bc-deco">♘</span>
+        <span class="bc-tag">DAILY BONUS</span>
+        <h3>Бонус каждый день</h3>
+        <p>Заходи ежедневно — бонус растёт с серией входов.</p>
+        <div class="streak-dots">
+          @for (d of [1,2,3,4,5,6,7]; track d) {
+            <div class="sd" [class.sd-on]="d<=4" [class.sd-today]="d===4">
+              <span>{{ d }}</span>
+              <span class="sd-coin">◈</span>
+            </div>
+          }
+        </div>
+        <div class="bonus-row">
+          <span>Сегодня</span>
+          <span class="br-val">+45 монет</span>
+        </div>
+      </div>
+
+      <!-- Shop — tall -->
+      <div class="bc bc-tall reveal">
+        <span class="bc-deco">♖</span>
+        <span class="bc-tag">МАГАЗИН</span>
+        <h3>Темы доски</h3>
+        <p>6 тем и тайтлы за монеты.</p>
+        <div class="themes-grid">
+          @for (t of themeList; track t.name) {
+            <div class="tg-item" [class.tg-active]="t.active">
+              <div class="tg-board" [style]="'--l:'+t.l+';--d:'+t.d"></div>
+              <span class="tg-name">{{ t.name }}</span>
+              @if (t.free) { <span class="tg-free">Бесплатно</span> }
+              @if (!t.free){ <span class="tg-price">◈ {{ t.price }}</span> }
+            </div>
+          }
+        </div>
+        <a routerLink="/shop" class="bc-link">В магазин →</a>
+      </div>
+
+      <!-- Achievements -->
+      <div class="bc reveal">
+        <span class="bc-deco">♙</span>
+        <span class="bc-tag">ДОСТИЖЕНИЯ</span>
+        <h3>15+ наград</h3>
+        <p>За победы, серии побед и активность.</p>
+        <div class="ach-list">
+          @for (a of achList; track a.t) {
+            <div class="al-row">
+              <span class="al-ico">{{ a.ico }}</span>
+              <div class="al-info">
+                <span class="al-t">{{ a.t }}</span>
+                <span class="al-d">{{ a.d }}</span>
+              </div>
+              <span class="al-check">✓</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Opening detector -->
+      <div class="bc reveal">
+        <span class="bc-deco">♛</span>
+        <span class="bc-tag">OPENING DETECTOR</span>
+        <h3>Распознаёт дебют</h3>
+        <p>Во время игры определяет дебют и показывает название над доской.</p>
+        <div class="openings-list">
+          @for (o of openingExamples; track o.n) {
+            <div class="ol-item">
+              <span class="ol-moves">{{ o.moves }}</span>
+              <span class="ol-name">{{ o.n }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ══════════════ LEARN ══════════════ -->
+  <section class="learn-sec">
+    <div class="learn-inner">
+      <div class="learn-left reveal">
+        <span class="s-label">ОБУЧЕНИЕ</span>
+        <h2 class="s-h2">Смотри и<br><em>учись</em></h2>
+        <p>Топ шахматные стримеры и обучающие материалы прямо в платформе.</p>
+        <a routerLink="/learn" class="sc-btn">Перейти к обучению →</a>
+      </div>
+      <div class="streamers-grid reveal">
+        @for (s of streamers; track s.name) {
+          <div class="sg-item">
+            <div class="sg-avatar">{{ s.name[0] }}</div>
+            <div class="sg-info">
+              <span class="sg-name">{{ s.name }}</span>
+              <span class="sg-subs">{{ s.subs }}</span>
+            </div>
+            <div class="sg-dot" [class.sg-live]="s.live"></div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ QUOTE ══════════════ -->
+  <section class="quote-sec">
+    <div class="qs-pattern"></div>
+    <div class="qs-fade-l"></div>
+    <div class="qs-fade-r"></div>
+    <div class="qs-inner reveal">
+      <span class="qs-mark">"</span>
+      <blockquote>{{ currentQuote.text }}</blockquote>
+      <cite>— {{ currentQuote.author }}</cite>
+    </div>
+  </section>
+
+  <!-- ══════════════ CTA ══════════════ -->
+  <section class="cta-sec">
+    <app-floating-pieces></app-floating-pieces>
+    <div class="cta-orb co1"></div>
+    <div class="cta-orb co2"></div>
+    <div class="cta-orb co3"></div>
+    <div class="cta-inner reveal">
+      <span class="s-label">НАЧАТЬ СЕЙЧАС</span>
+      <h2 class="cta-h">Готов сыграть<span class="cta-dot">?</span></h2>
+      <p>Зарегистрируйся и получи <span class="cta-gold">100 монет</span> на старте</p>
+      <div class="cta-btns">
+        <a routerLink="/register" class="btn-main">
+          <span class="btn-shimmer"></span>
+          <span>Создать аккаунт</span>
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+            <path d="M3 8.5h11M9 4l4.5 4.5L9 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a routerLink="/play" class="btn-ghost">Играть без регистрации</a>
+      </div>
+    </div>
+  </section>
+
+</div>
