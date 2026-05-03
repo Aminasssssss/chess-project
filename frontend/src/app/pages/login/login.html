@@ -1,67 +1,50 @@
 <div class="auth-page">
   <div class="auth-card">
-    <div class="auth-header">
-      <span class="auth-label">CHESS ARENA KZ</span>
-      <h1>Войти</h1>
-      <p>Продолжи с того места где остановился</p>
-    </div>
-
-    <div class="auth-form">
-      <div class="field">
-        <label>Имя пользователя</label>
-        <input
-          type="text"
-          [(ngModel)]="form.username"
-          placeholder="username"
-          [class.error-input]="error"
-        />
+    <div class="ac-inner">
+      <div class="auth-brand">
+        <span class="ab-piece">♟</span>
+        <span class="ab-name">Chess Arena <span class="ab-kz">KZ</span></span>
       </div>
-
-      <div class="field">
-        <label>Пароль</label>
-        <input
-          type="password"
-          [(ngModel)]="form.password"
-          placeholder="••••••••"
-          [class.error-input]="error"
-          (keyup.enter)="onSubmit()"
-        />
+      <div class="auth-header">
+        <span class="ah-label">Chess Arena KZ</span>
+        <h1>Войти</h1>
+        <p>Продолжи с того места где остановился</p>
       </div>
-
-      @if (error) {
-        <div class="error-msg">{{ error }}</div>
-      }
-
-      <button
-        class="btn-primary submit-btn"
-        (click)="onSubmit()"
-        [disabled]="loading">
-        {{ loading ? 'Входим...' : 'Войти' }}
-      </button>
-
-      <p class="auth-switch">
-        Нет аккаунта?
-        <a routerLink="/register">Зарегистрироваться</a>
-      </p>
+      <div class="auth-form">
+        <div class="field">
+          <label>Имя пользователя</label>
+          <input type="text" [(ngModel)]="form.username" placeholder="username" [class.error-input]="error"/>
+        </div>
+        <div class="field">
+          <label>Пароль</label>
+          <input type="password" [(ngModel)]="form.password" placeholder="••••••••" [class.error-input]="error" (keyup.enter)="onSubmit()"/>
+        </div>
+        @if (error) { <div class="error-msg">{{ error }}</div> }
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="loading">
+          {{ loading ? 'Входим...' : 'Войти' }}
+        </button>
+        <p class="auth-switch">Нет аккаунта? <a routerLink="/register">Зарегистрироваться</a></p>
+      </div>
     </div>
   </div>
 
   <div class="auth-visual">
-    <div class="visual-content">
-      <h2>Добро пожаловать<br>в <span>Chess Arena</span></h2>
-      <div class="visual-stats">
-        <div class="vs">
-          <span class="vs-num">1200</span>
-          <span class="vs-label">Стартовый ELO</span>
-        </div>
-        <div class="vs">
-          <span class="vs-num">AI</span>
-          <span class="vs-label">Разбор партий</span>
-        </div>
-        <div class="vs">
-          <span class="vs-num">KZ</span>
-          <span class="vs-label">League</span>
-        </div>
+    <div class="av-orb o1" style="--d:7s"></div>
+    <div class="av-orb o2" style="--d:9s;--del:3s"></div>
+    <div class="av-grid"></div>
+    <div class="av-pieces">
+      <span class="avp" style="left:5%;top:10%;--s:6rem;--d:8s;--del:0s">♔</span>
+      <span class="avp" style="right:8%;top:15%;--s:4rem;--d:11s;--del:2s">♛</span>
+      <span class="avp" style="left:10%;bottom:15%;--s:3rem;--d:9s;--del:1s">♞</span>
+      <span class="avp" style="right:5%;bottom:20%;--s:5rem;--d:7s;--del:3s">♜</span>
+    </div>
+    <div class="av-content">
+      <div class="av-piece-main">♟</div>
+      <h2>Добро пожаловать<br>в <em>Chess Arena</em></h2>
+      <div class="av-stats">
+        <div class="av-stat"><span class="as-num">1200</span><span class="as-lbl">Стартовый ELO рейтинг</span></div>
+        <div class="av-stat"><span class="as-num">AI</span><span class="as-lbl">Разбор каждой партии</span></div>
+        <div class="av-stat"><span class="as-num">KZ</span><span class="as-lbl">Kazakhstan League</span></div>
       </div>
     </div>
   </div>

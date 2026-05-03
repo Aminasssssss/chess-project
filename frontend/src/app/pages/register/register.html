@@ -1,85 +1,62 @@
 <div class="auth-page">
   <div class="auth-card">
-    <div class="auth-header">
-      <span class="auth-label">CHESS ARENA KZ</span>
-      <h1>Регистрация</h1>
-      <p>Создай аккаунт и получи 100 монет на старте</p>
-    </div>
-
-    <div class="auth-form">
-      <div class="field">
-        <label>Имя пользователя *</label>
-        <input
-          type="text"
-          [(ngModel)]="form.username"
-          placeholder="username"
-          [class.error-input]="error"
-        />
+    <div class="ac-inner">
+      <div class="auth-brand">
+        <span class="ab-piece">♟</span>
+        <span class="ab-name">Chess Arena <span class="ab-kz">KZ</span></span>
       </div>
-
-      <div class="field">
-        <label>Email</label>
-        <input
-          type="email"
-          [(ngModel)]="form.email"
-          placeholder="email@example.com"
-        />
+      <div class="auth-header">
+        <span class="ah-label">Chess Arena KZ</span>
+        <h1>Регистрация</h1>
+        <p>Создай аккаунт и получи 100 монет на старте</p>
       </div>
-
-      <div class="field">
-        <label>Пароль *</label>
-        <input
-          type="password"
-          [(ngModel)]="form.password"
-          placeholder="••••••••"
-          [class.error-input]="error"
-        />
+      <div class="auth-form">
+        <div class="field">
+          <label>Имя пользователя *</label>
+          <input type="text" [(ngModel)]="form.username" placeholder="username" [class.error-input]="error"/>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="form.email" placeholder="email@example.com"/>
+        </div>
+        <div class="field">
+          <label>Пароль *</label>
+          <input type="password" [(ngModel)]="form.password" placeholder="••••••••" [class.error-input]="error"/>
+        </div>
+        <div class="field">
+          <label>Город</label>
+          <select [(ngModel)]="form.city">
+            <option value="">Выбери город</option>
+            @for (city of cities; track city) { <option [value]="city">{{ city }}</option> }
+          </select>
+        </div>
+        @if (error) { <div class="error-msg">{{ error }}</div> }
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="loading">
+          {{ loading ? 'Создаём аккаунт...' : 'Создать аккаунт' }}
+        </button>
+        <p class="auth-switch">Уже есть аккаунт? <a routerLink="/login">Войти</a></p>
       </div>
-
-      <div class="field">
-        <label>Город</label>
-        <select [(ngModel)]="form.city">
-          <option value="">Выбери город</option>
-          @for (city of cities; track city) {
-            <option [value]="city">{{ city }}</option>
-          }
-        </select>
-      </div>
-
-      @if (error) {
-        <div class="error-msg">{{ error }}</div>
-      }
-
-      <button
-        class="btn-primary submit-btn"
-        (click)="onSubmit()"
-        [disabled]="loading">
-        {{ loading ? 'Создаём аккаунт...' : 'Создать аккаунт' }}
-      </button>
-
-      <p class="auth-switch">
-        Уже есть аккаунт?
-        <a routerLink="/login">Войти</a>
-      </p>
     </div>
   </div>
 
   <div class="auth-visual">
-    <div class="visual-content">
-      <h2>Начни путь<br>к <span>гроссмейстеру</span></h2>
-      <div class="perks">
-        <div class="perk">
-          <span class="perk-num">100</span>
-          <span class="perk-text">монет на старте</span>
-        </div>
-        <div class="perk">
-          <span class="perk-num">1200</span>
-          <span class="perk-text">начальный ELO рейтинг</span>
-        </div>
-        <div class="perk">
-          <span class="perk-num">∞</span>
-          <span class="perk-text">партий против AI</span>
-        </div>
+    <div class="av-orb o1" style="--d:7s"></div>
+    <div class="av-orb o2" style="--d:9s;--del:3s"></div>
+    <div class="av-grid"></div>
+    <div class="av-pieces">
+      <span class="avp" style="left:5%;top:10%;--s:6rem;--d:8s;--del:0s">♕</span>
+      <span class="avp" style="right:8%;top:15%;--s:4rem;--d:11s;--del:2s">♚</span>
+      <span class="avp" style="left:10%;bottom:15%;--s:3rem;--d:9s;--del:1s">♗</span>
+      <span class="avp" style="right:5%;bottom:20%;--s:5rem;--d:7s;--del:3s">♘</span>
+    </div>
+    <div class="av-content">
+      <div class="av-piece-main">♛</div>
+      <h2>Начни путь<br>к <em>гроссмейстеру</em></h2>
+      <div class="av-perks">
+        <div class="av-perk"><span class="ap-n">100</span><span class="ap-t">монет на старте бесплатно</span></div>
+        <div class="av-perk"><span class="ap-n">1200</span><span class="ap-t">начальный ELO рейтинг</span></div>
+        <div class="av-perk"><span class="ap-n">∞</span><span class="ap-t">партий против AI бесплатно</span></div>
+        <div class="av-perk"><span class="ap-n">AI</span><span class="ap-t">персональный тренер после каждой партии</span></div>
       </div>
     </div>
   </div>

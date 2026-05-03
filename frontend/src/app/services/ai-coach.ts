@@ -5,7 +5,7 @@ import { Auth } from './auth';
 
 @Injectable({ providedIn: 'root' })
 export class AiCoach {
-  private apiUrl = 'https://chess-project-5-anui.onrender.com/api';
+  private apiUrl = 'https://shess-project.onrender.com/api';
 
   constructor(private http: HttpClient, private auth: Auth) {}
 

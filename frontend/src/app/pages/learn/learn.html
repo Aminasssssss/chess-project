@@ -1,0 +1,85 @@
+<div class="learn-page">
+
+  <div class="lp-header">
+    <div class="lp-header-bg"></div>
+    <div class="container">
+      <span class="s-label">ОБУЧЕНИЕ</span>
+      <h1>Смотри и <em>учись</em></h1>
+      <p>Топ шахматные стримеры, дебюты и тактические паттерны — всё в одном месте</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- STREAMERS -->
+    <div class="lp-section">
+      <div class="lps-head">
+        <span class="s-label">CHESS TV</span>
+        <h2>Лучшие стримеры</h2>
+      </div>
+      <div class="streamers-grid">
+        @for (s of streamers; track s.name) {
+          <a [href]="s.url" target="_blank" class="sc-card">
+            <div class="sc-top">
+              <div class="sc-avatar">{{ s.name[0] }}</div>
+              <div class="sc-info">
+                <span class="sc-name">{{ s.name }}</span>
+                <span class="sc-ch">{{ s.ch }}</span>
+              </div>
+              <div class="sc-subs">{{ s.subs }}</div>
+            </div>
+            <p class="sc-desc">{{ s.desc }}</p>
+            <div class="sc-footer">
+              <span class="sc-status" [class.sc-live]="s.live">
+                <span class="sc-dot"></span>
+                {{ s.live ? 'Live сейчас' : 'YouTube' }}
+              </span>
+              <span class="sc-go">Смотреть →</span>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+
+    <!-- OPENINGS -->
+    <div class="lp-section">
+      <div class="lps-head">
+        <span class="s-label">ДЕБЮТЫ</span>
+        <h2>Популярные начала</h2>
+      </div>
+      <div class="openings-grid">
+        @for (o of openings; track o.name) {
+          <a routerLink="/play" class="op-card">
+            <div class="op-icon">{{ o.icon }}</div>
+            <div class="op-body">
+              <span class="op-level" [class]="'lv-'+o.level">{{ o.level }}</span>
+              <h3>{{ o.name }}</h3>
+              <code class="op-moves">{{ o.moves }}</code>
+            </div>
+            <span class="op-play">Попробовать →</span>
+          </a>
+        }
+      </div>
+    </div>
+
+    <!-- TACTICS -->
+    <div class="lp-section">
+      <div class="lps-head">
+        <span class="s-label">ТАКТИКА</span>
+        <h2>Паттерны которые нужно знать</h2>
+      </div>
+      <div class="tactics-grid">
+        @for (t of tactics; track t.name) {
+          <div class="tc-card">
+            <div class="tc-icon">{{ t.icon }}</div>
+            <h3>{{ t.name }}</h3>
+            <p>{{ t.desc }}</p>
+            <span class="tc-ex">{{ t.example }}</span>
+            <a routerLink="/puzzle" class="tc-link">Тренировать в Puzzle Rush →</a>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

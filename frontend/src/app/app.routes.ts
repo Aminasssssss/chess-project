@@ -9,6 +9,8 @@ import { Play } from './pages/play/play';
 import { Multiplayer } from './pages/multiplayer/multiplayer';
 import { Pricing } from './pages/pricing/pricing';
 import { Coach } from './pages/coach/coach';
+import { Learn } from './pages/learn/learn';
+import { Shop } from './pages/shop/shop';
 
 
 
@@ -24,6 +26,8 @@ export const routes: Routes = [
   { path: 'puzzle', component: Puzzle },
   { path: 'pricing', component: Pricing },
   { path: 'coach', component: Coach },
+  { path: 'learn', component: Learn },
+  { path: 'shop',  component: Shop },
 
   { path: '**', redirectTo: '' },
 

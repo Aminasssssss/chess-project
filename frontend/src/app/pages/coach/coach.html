@@ -1,90 +1,298 @@
-<div class="coach-page">
-  <div class="page-header">
-    <div class="container">
-      <span class="section-label">AI ТРЕНЕР</span>
-      <h1>Персональный разбор</h1>
-      <p>Анализ твоей игры и план развития</p>
-    </div>
+@if (toast) {
+  <div class="coach-toast" [class.toast-success]="toast.type==='success'"
+       [class.toast-error]="toast.type==='error'"
+       [class.toast-info]="toast.type==='info'">
+    {{ toast.msg }}
   </div>
+}
 
-  <div class="container">
+<canvas #bgCanvas class="coach-bg-canvas"></canvas>
+<canvas #particleCanvas class="coach-particle-canvas"></canvas>
+
+<div class="coach-orbs">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="coach-scan"></div>
+
+<div class="coach-chess-ambient">
+  <span class="ca-p" style="left:2%;top:8%;--fs:7rem;--d:11s;--del:0s;--r:-8deg;--fy:-24px">♔</span>
+  <span class="ca-p" style="right:3%;top:12%;--fs:5rem;--d:9s;--del:2s;--r:7deg;--fy:-18px">♛</span>
+  <span class="ca-p" style="left:3%;bottom:14%;--fs:6rem;--d:13s;--del:1s;--r:4deg;--fy:-22px">♟</span>
+  <span class="ca-p" style="right:5%;bottom:20%;--fs:8rem;--d:8s;--del:3s;--r:-5deg;--fy:-20px">♞</span>
+  <span class="ca-p" style="left:45%;top:3%;--fs:4rem;--d:15s;--del:1.5s;--r:2deg;--fy:-12px">♗</span>
+  <span class="ca-p" style="right:20%;bottom:6%;--fs:5rem;--d:10s;--del:4s;--r:-3deg;--fy:-16px">♖</span>
+</div>
+
+<div class="coach-page">
+
+  <header class="coach-header">
+    <div class="ch-live-bar">
+      <span class="live-label"><span class="live-dot"></span>AI COACH</span>
+      <div class="ticker-track">
+        <div class="ticker-inner">
+          @for (item of tickerItems; track item) { <span>{{ item }}</span> }
+          @for (item of tickerItems; track item) { <span>{{ item }}</span> }
+        </div>
+      </div>
+    </div>
+    <div class="ch-inner">
+      <div class="ch-title-area">
+        <span class="ch-badge">♟&nbsp;&nbsp;ПЕРСОНАЛЬНЫЙ ТРЕНЕР&nbsp;&nbsp;♟</span>
+        <h1 class="ch-title">AI <em>Тренер</em></h1>
+        <p class="ch-sub">Глубокий анализ твоей игры · Персональный план роста · Прогноз ELO</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="coach-body">
+
     @if (!auth.isLoggedIn()) {
-      <div class="not-logged">
+      <div class="not-logged reveal">
+        <div class="nl-piece">♟</div>
         <h2>Войди чтобы получить анализ</h2>
-        <a routerLink="/login" class="btn-primary">Войти</a>
+        <p>AI тренер анализирует твои партии и даёт персональные советы на основе реальной статистики</p>
+        <div class="nl-features">
+          <div class="nlf-item"><span>♔</span><span>Анализ стиля игры</span></div>
+          <div class="nlf-item"><span>♕</span><span>Радар навыков</span></div>
+          <div class="nlf-item"><span>♗</span><span>План тренировок</span></div>
+          <div class="nlf-item"><span>♞</span><span>Прогноз ELO</span></div>
+        </div>
+        <a routerLink="/login" class="btn-login">
+          <span class="btn-shimmer"></span>
+          Войти в аккаунт
+        </a>
       </div>
     }
 
     @if (auth.isLoggedIn() && loading) {
-      <div class="loading-screen">
-        <div class="loading-spinner"></div>
-        <p>AI анализирует твою игру...</p>
+      <div class="coach-loading">
+        <div class="cl-pieces">
+          <span style="--i:0">♔</span>
+          <span style="--i:1">♕</span>
+          <span style="--i:2">♖</span>
+          <span style="--i:3">♗</span>
+          <span style="--i:4">♘</span>
+        </div>
+        <div class="cl-ring"></div>
+        <p class="cl-title">AI анализирует твою игру...</p>
+        <p class="cl-fact">{{ funFacts[currentFact] }}</p>
+        <div class="cl-dots">
+          @for (f of funFacts; track f; let i = $index) {
+            <span [class.active]="i === currentFact"></span>
+          }
+        </div>
       </div>
     }
 
     @if (auth.isLoggedIn() && !loading && error) {
-      <div class="error-msg">{{ error }}</div>
+      <div class="error-card reveal">
+        <span class="section-label">ОШИБКА</span>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="loadAnalysis()">
+          <span class="btn-shimmer"></span>
+          Попробовать снова
+        </button>
+      </div>
     }
 
     @if (auth.isLoggedIn() && !loading && stats) {
       <div class="coach-layout">
 
-        <div class="stats-panel">
-          <div class="stat-row">
-            <span class="stat-label">ELO</span>
-            <span class="stat-val gold">{{ stats.elo }}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Партий</span>
-            <span class="stat-val">{{ stats.total }}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Победы</span>
-            <span class="stat-val green">{{ stats.wins }}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Поражения</span>
-            <span class="stat-val red">{{ stats.losses }}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Ничьи</span>
-            <span class="stat-val">{{ stats.draws }}</span>
-          </div>
+        <div class="coach-sidebar">
 
-          <div class="winrate-block">
-            <div class="winrate-header">
-              <span>Винрейт</span>
-              <span class="winrate-num">{{ stats.win_rate }}%</span>
+          <div class="stats-panel reveal">
+            <span class="section-label">СТАТИСТИКА</span>
+
+            <div class="sp-elo">
+              <span class="se-num">{{ animElo }}</span>
+              <span class="se-lbl">ELO</span>
+              <span class="se-level">{{ getLevelLabel() }}</span>
             </div>
-            <div class="winrate-bar">
-              <div class="winrate-fill" [style.width.%]="stats.win_rate"></div>
+
+            <div class="sp-level-bar">
+              <div class="slb-track">
+                <div class="slb-fill" [style.width.%]="getLevelProgress()"></div>
+              </div>
+              <span class="slb-label">До следующего уровня</span>
+            </div>
+
+            <div class="sp-rows">
+              <div class="sp-row">
+                <span class="sr-lbl">Партий</span>
+                <span class="sr-val">{{ stats.total }}</span>
+              </div>
+              <div class="sp-row">
+                <span class="sr-lbl">Победы</span>
+                <span class="sr-val sv-g">{{ animWins }}</span>
+              </div>
+              <div class="sp-row">
+                <span class="sr-lbl">Поражения</span>
+                <span class="sr-val sv-r">{{ animLosses }}</span>
+              </div>
+              <div class="sp-row">
+                <span class="sr-lbl">Ничьи</span>
+                <span class="sr-val">{{ stats.draws }}</span>
+              </div>
+              <div class="sp-row">
+                <span class="sr-lbl">Серия</span>
+                <span class="sr-val sv-gold">{{ animStreak }}</span>
+              </div>
+              <div class="sp-row">
+                <span class="sr-lbl">Лучшая серия</span>
+                <span class="sr-val sv-gold">{{ stats.max_streak }}</span>
+              </div>
+            </div>
+
+            <div class="sp-winrate">
+              <div class="sw-head">
+                <span>Винрейт</span>
+                <span class="sw-num">{{ animWinRate }}%</span>
+              </div>
+              <div class="sw-bar">
+                <div class="sw-fill" [style.width.%]="animWinRate"></div>
+              </div>
             </div>
           </div>
 
-          <div class="streak-block">
-            <span class="streak-label">Текущая серия</span>
-            <span class="streak-num">{{ stats.streak }}</span>
-            <span class="streak-label">Лучшая серия</span>
-            <span class="streak-num gold">{{ stats.max_streak }}</span>
+          <div class="radar-card reveal">
+            <span class="section-label">ПРОФИЛЬ ИГРОКА</span>
+            <div class="rc-wrap">
+              <svg viewBox="0 0 220 220" class="radar-svg">
+                @for (level of [0.2,0.4,0.6,0.8,1.0]; track level) {
+                  <polygon [attr.points]="getHexPoints(110,110,85*level)"
+                           fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="1"/>
+                }
+                @for (axis of radarAxes; track axis.label; let i = $index) {
+                  <line x1="110" y1="110"
+                        [attr.x2]="110 + 85 * Math.cos((i*60-90)*Math.PI/180)"
+                        [attr.y2]="110 + 85 * Math.sin((i*60-90)*Math.PI/180)"
+                        stroke="rgba(201,168,76,0.1)" stroke-width="1"/>
+                }
+                <polygon [attr.points]="getRadarPoints()"
+                         fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1.5"/>
+                @for (axis of radarAxes; track axis.label; let i = $index) {
+                  <circle
+                    [attr.cx]="110 + 85*(axis.value/100)*Math.cos((i*60-90)*Math.PI/180)"
+                    [attr.cy]="110 + 85*(axis.value/100)*Math.sin((i*60-90)*Math.PI/180)"
+                    r="3.5" fill="#c9a84c"/>
+                }
+                @for (axis of radarAxes; track axis.label; let i = $index) {
+                  <text
+                    [attr.x]="110 + 102*Math.cos((i*60-90)*Math.PI/180)"
+                    [attr.y]="110 + 102*Math.sin((i*60-90)*Math.PI/180)"
+                    text-anchor="middle" dominant-baseline="middle"
+                    class="radar-lbl">{{ axis.label }}</text>
+                }
+              </svg>
+            </div>
+            <div class="rc-legend">
+              @for (axis of radarAxes; track axis.label) {
+                <div class="rl">
+                  <span class="rl-lbl">{{ axis.label }}</span>
+                  <div class="rl-bar"><div class="rl-fill" [style.width.%]="axis.value"></div></div>
+                  <span class="rl-val">{{ axis.value }}</span>
+                </div>
+              }
+            </div>
           </div>
 
-          <button class="btn-secondary refresh-btn" (click)="loadAnalysis()">
-            Обновить анализ
+          <div class="quick-tip-card reveal">
+            <div class="qt-head">
+              <span class="section-label">СОВЕТ ДНЯ</span>
+              <button class="qt-btn" (click)="loadQuickTip()" [disabled]="quickTipLoading">
+                {{ quickTipLoading ? '...' : '↻ Новый' }}
+              </button>
+            </div>
+            @if (quickTip) {
+              <p class="qt-text">{{ quickTip }}</p>
+            } @else {
+              <p class="qt-ph" (click)="loadQuickTip()">Нажми «Новый» для совета</p>
+            }
+          </div>
+
+          <button class="btn-refresh" (click)="loadAnalysis()">
+            ↻&nbsp;&nbsp;Обновить анализ
           </button>
+
         </div>
 
-        <div class="analysis-panel">
-          @for (section of sections; track section.title) {
-            <div class="analysis-card">
-              <div class="card-header">
-                <span class="card-icon">{{ getSectionIcon(section.title) }}</span>
-                <span class="card-title">{{ section.title }}</span>
-              </div>
-              <p class="card-content">{{ section.content }}</p>
+        <div class="coach-main">
+
+          @if (sections.length > 0) {
+            <div class="analysis-sections">
+              @for (section of sections; track section.title; let i = $index) {
+                <div class="analysis-card reveal" [style.animation-delay]="(i*.08)+'s'">
+                  <div class="ac-head">
+                    <span class="ac-icon">{{ getSectionIcon(section.title) }}</span>
+                    <span class="ac-title">{{ section.title }}</span>
+                  </div>
+                  <p class="ac-text">{{ section.content }}</p>
+                </div>
+              }
             </div>
           }
-        </div>
 
+          <div class="predictor-card reveal">
+            <span class="section-label">ELO ПРОГНОЗ</span>
+            <div class="pc-inner">
+              <div class="pc-now">
+                <span class="pn-num">{{ stats.elo }}</span>
+                <span class="pn-lbl">Сейчас</span>
+              </div>
+              <div class="pc-arrow">
+                <svg width="80" height="20" viewBox="0 0 80 20">
+                  <path d="M0 10 L68 10 M56 4 L70 10 L56 16" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>через месяц</span>
+              </div>
+              <div class="pc-fut">
+                <span class="pn-num gold">{{ stats.elo + getPotentialGain() }}</span>
+                <span class="pn-lbl">Потенциал</span>
+              </div>
+            </div>
+            <p class="pc-hint">При ежедневных тренировках и анализе партий</p>
+          </div>
+
+          <div class="opening-rec reveal">
+            <span class="section-label">РЕКОМЕНДАЦИЯ ДЕБЮТА</span>
+            <div class="or-inner">
+              <span class="or-ico">♟</span>
+              <div>
+                <h3>{{ getOpeningRec().name }}</h3>
+                <p>{{ getOpeningRec().desc }}</p>
+                <a routerLink="/learn" class="or-link">Изучить дебюты →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="training-grid reveal">
+            <div class="section-row" style="grid-column:1/-1">
+              <span class="section-label">ПЛАН НА СЕГОДНЯ</span>
+              <span class="section-sub">3 задания для роста</span>
+            </div>
+            <div class="tg-card">
+              <span class="tg-icon">♟</span>
+              <h4>Puzzle Rush</h4>
+              <p>10 тактических задач</p>
+              <a routerLink="/puzzle" class="tg-link">Начать →</a>
+            </div>
+            <div class="tg-card">
+              <span class="tg-icon">♞</span>
+              <h4>Анализ партии</h4>
+              <p>Разбери последнюю игру</p>
+              <a routerLink="/game" class="tg-link">Перейти →</a>
+            </div>
+            <div class="tg-card">
+              <span class="tg-icon">♗</span>
+              <h4>Изучи дебют</h4>
+              <p>{{ getOpeningRec().name }}</p>
+              <a routerLink="/learn" class="tg-link">Изучить →</a>
+            </div>
+          </div>
+
+        </div>
       </div>
     }
   </div>
