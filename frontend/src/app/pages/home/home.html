@@ -1,0 +1,101 @@
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-label">Chess Arena KZ</span>
+      <h1>
+        Шахматы на<br>
+        <span class="accent">новом уровне</span>
+      </h1>
+      <p class="hero-desc">
+        Играй против AI, соревнуйся с друзьями,<br>
+        получай разбор партий от искусственного интеллекта
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/play" class="btn-primary">Начать игру</a>
+        <a routerLink="/leaderboard" class="btn-secondary">Kazakhstan League</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">1200</span>
+        <span class="stat-label">Стартовый ELO</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">5</span>
+        <span class="stat-label">Уровней сложности</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">AI</span>
+        <span class="stat-label">Разбор партий</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="modes section">
+  <div class="container">
+    <span class="section-label">РЕЖИМЫ ИГРЫ</span>
+    <h2>Выбери формат</h2>
+    <div class="modes-grid">
+      <a routerLink="/play" class="mode-card">
+        <span class="mode-num">01</span>
+        <h3>Против AI</h3>
+        <p>Minimax алгоритм с 5 уровнями сложности. От новичка до гроссмейстера.</p>
+        <span class="mode-arrow">→</span>
+      </a>
+      <a routerLink="/play/multiplayer" class="mode-card">
+        <span class="mode-num">02</span>
+        <h3>Мультиплеер</h3>
+        <p>Создай комнату и отправь ссылку другу. Играй в реальном времени.</p>
+        <span class="mode-arrow">→</span>
+      </a>
+      <a routerLink="/puzzle" class="mode-card">
+        <span class="mode-num">03</span>
+        <h3>Puzzle Rush</h3>
+        <p>Реши максимум задач за 5 минут. Тренируй тактику.</p>
+        <span class="mode-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="features section dark-section">
+  <div class="container">
+    <span class="section-label">ВОЗМОЖНОСТИ</span>
+    <h2>Больше чем просто шахматы</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-tag">AI COACH</span>
+        <h3>Разбор как гроссмейстер</h3>
+        <p>После партии AI анализирует каждый ход и объясняет где ты ошибся и как сыграть лучше.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-tag">LIVE ML</span>
+        <h3>Вероятность победы</h3>
+        <p>ML модель считает шансы после каждого хода в реальном времени. Как в спортивных трансляциях.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-tag">KAZAKHSTAN LEAGUE</span>
+        <h3>Алматы vs Астана</h3>
+        <p>Выбери свой город и соревнуйся в командном зачёте. Лидерборд обновляется в реальном времени.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-tag">ГЕЙМИФИКАЦИЯ</span>
+        <h3>Chess Streak</h3>
+        <p>Серия побед открывает достижения и монеты. Монеты тратишь на Pro доступ и скины.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta section">
+  <div class="container">
+    <h2>Готов сыграть?</h2>
+    <p>Зарегистрируйся и получи 100 монет на старте</p>
+    <div class="cta-actions">
+      <a routerLink="/register" class="btn-primary">Создать аккаунт</a>
+      <a routerLink="/play" class="btn-secondary">Играть без регистрации</a>
+    </div>
+  </div>
+</section>

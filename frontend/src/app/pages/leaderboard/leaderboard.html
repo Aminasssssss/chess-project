@@ -1,0 +1,79 @@
+<div class="leaderboard-page">
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">KAZAKHSTAN LEAGUE</span>
+      <h1>Рейтинг игроков</h1>
+      <p>Соревнуйся за честь своего города</p>
+    </div>
+  </div>
+
+  <div class="container">
+    @if (cityStats.length > 0) {
+      <div class="city-league">
+        <span class="section-label">КОМАНДНЫЙ ЗАЧЁТ</span>
+        <div class="city-grid">
+          @for (city of cityStats; track city.city; let i = $index) {
+            <div class="city-card" [class.top]="i === 0"
+                 (click)="filterByCity(city.city)">
+              <span class="city-rank">{{ getMedal(i) }}</span>
+              <span class="city-name">{{ city.city }}</span>
+              <span class="city-elo">{{ city.avg_elo }} avg ELO</span>
+              <span class="city-count">{{ city.count }} игроков</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="filters">
+      <button
+        class="filter-btn"
+        [class.active]="selectedCity === ''"
+        (click)="filterByCity('')">
+        Все города
+      </button>
+      @for (city of cities; track city) {
+        <button
+          class="filter-btn"
+          [class.active]="selectedCity === city"
+          (click)="filterByCity(city)">
+          {{ city }}
+        </button>
+      }
+    </div>
+
+    @if (loading) {
+      <div class="loading">Загружаем рейтинг...</div>
+    } @else {
+      <div class="players-table">
+        <div class="table-header">
+          <span>#</span>
+          <span>Игрок</span>
+          <span>Город</span>
+          <span>ELO</span>
+          <span>Победы</span>
+          <span>Серия</span>
+        </div>
+        @for (player of players; track player.username; let i = $index) {
+          <div class="table-row" [class.top-three]="i < 3">
+            <span class="rank">{{ getMedal(i) }}</span>
+            <span class="username">{{ player.username }}</span>
+            <span class="city">{{ player.city || '—' }}</span>
+            <span class="elo">{{ player.elo }}</span>
+            <span class="wins">{{ player.wins }}</span>
+            <span class="streak">
+              @if (player.streak > 0) {
+                {{ player.streak }}
+              } @else {
+                —
+              }
+            </span>
+          </div>
+        }
+        @if (players.length === 0) {
+          <div class="empty">Пока нет игроков</div>
+        }
+      </div>
+    }
+  </div>
+</div>

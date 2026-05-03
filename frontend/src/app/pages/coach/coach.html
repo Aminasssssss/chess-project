@@ -1,0 +1,91 @@
+<div class="coach-page">
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">AI ТРЕНЕР</span>
+      <h1>Персональный разбор</h1>
+      <p>Анализ твоей игры и план развития</p>
+    </div>
+  </div>
+
+  <div class="container">
+    @if (!auth.isLoggedIn()) {
+      <div class="not-logged">
+        <h2>Войди чтобы получить анализ</h2>
+        <a routerLink="/login" class="btn-primary">Войти</a>
+      </div>
+    }
+
+    @if (auth.isLoggedIn() && loading) {
+      <div class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>AI анализирует твою игру...</p>
+      </div>
+    }
+
+    @if (auth.isLoggedIn() && !loading && error) {
+      <div class="error-msg">{{ error }}</div>
+    }
+
+    @if (auth.isLoggedIn() && !loading && stats) {
+      <div class="coach-layout">
+
+        <div class="stats-panel">
+          <div class="stat-row">
+            <span class="stat-label">ELO</span>
+            <span class="stat-val gold">{{ stats.elo }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Партий</span>
+            <span class="stat-val">{{ stats.total }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Победы</span>
+            <span class="stat-val green">{{ stats.wins }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Поражения</span>
+            <span class="stat-val red">{{ stats.losses }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Ничьи</span>
+            <span class="stat-val">{{ stats.draws }}</span>
+          </div>
+
+          <div class="winrate-block">
+            <div class="winrate-header">
+              <span>Винрейт</span>
+              <span class="winrate-num">{{ stats.win_rate }}%</span>
+            </div>
+            <div class="winrate-bar">
+              <div class="winrate-fill" [style.width.%]="stats.win_rate"></div>
+            </div>
+          </div>
+
+          <div class="streak-block">
+            <span class="streak-label">Текущая серия</span>
+            <span class="streak-num">{{ stats.streak }}</span>
+            <span class="streak-label">Лучшая серия</span>
+            <span class="streak-num gold">{{ stats.max_streak }}</span>
+          </div>
+
+          <button class="btn-secondary refresh-btn" (click)="loadAnalysis()">
+            Обновить анализ
+          </button>
+        </div>
+
+        <div class="analysis-panel">
+          @for (section of sections; track section.title) {
+            <div class="analysis-card">
+              <div class="card-header">
+                <span class="card-icon">{{ getSectionIcon(section.title) }}</span>
+                <span class="card-title">{{ section.title }}</span>
+              </div>
+              <p class="card-content">{{ section.content }}</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+  </div>
+</div>

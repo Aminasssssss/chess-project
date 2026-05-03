@@ -1,0 +1,185 @@
+<div class="multiplayer-page">
+
+  @if (mode === 'waiting') {
+    <div class="waiting-screen">
+      <div class="container">
+        <span class="section-label">МУЛЬТИПЛЕЕР</span>
+        <h1>Играй с другом</h1>
+        <p class="subtitle">Создай комнату и отправь ссылку другу</p>
+
+        <div class="options-grid">
+          <div class="option-card">
+            <span class="option-num">01</span>
+            <h3>Создать комнату</h3>
+            <p>Получи ссылку и отправь другу</p>
+            <button class="btn-primary" (click)="createRoom()">
+              Создать комнату
+            </button>
+          </div>
+
+          <div class="option-card">
+            <span class="option-num">02</span>
+            <h3>Войти по коду</h3>
+            <p>Введи код комнаты от друга</p>
+            <div class="join-form">
+              <input
+                type="text"
+                [(ngModel)]="joinCode"
+                placeholder="ABC123"
+                maxlength="6"
+                (keyup.enter)="joinByCode()"
+              />
+              <button class="btn-primary" (click)="joinByCode()">
+                Войти
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mode === 'lobby') {
+    <div class="lobby-screen">
+      <div class="container">
+        <span class="section-label">ОЖИДАНИЕ</span>
+        <h1>Комната создана</h1>
+
+        <div class="room-info">
+          <div class="room-code">
+            <span class="code-label">КОД КОМНАТЫ</span>
+            <span class="code">{{ roomCode }}</span>
+          </div>
+
+          <div class="link-section">
+            <span class="link-label">ССЫЛКА ДЛЯ ДРУГА</span>
+            <div class="link-box">
+              <span class="link-text">{{ getLink() }}</span>
+              <button class="copy-btn" (click)="copyLink()">
+                {{ linkCopied ? '✓ Скопировано' : 'Копировать' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="waiting-indicator">
+            <div class="pulse-dot"></div>
+            <span>Ждём второго игрока...</span>
+          </div>
+
+          <div class="color-info">
+            Вы играете
+            <span class="color-badge">
+              {{ playerColor === 'w' ? '♔ Белыми' : '♚ Чёрными' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mode === 'playing') {
+    <div class="playing-screen">
+      <div class="container">
+        <div class="game-layout">
+
+          <div class="board-section">
+            <div class="status-bar">
+              <span class="status-text">{{ status }}</span>
+            </div>
+
+            <div class="board">
+              @for (row of board; track $index) {
+                <div class="row">
+                  @for (cell of row; track cell.sq) {
+                    <div
+                      class="square"
+                      [class.light]="cell.isLight"
+                      [class.dark]="!cell.isLight"
+                      [class.selected]="cell.isSelected"
+                      [class.legal]="cell.isLegal"
+                      [class.last-move]="cell.isLastMove"
+                      [class.in-check]="cell.isCheck"
+                      [class.has-piece]="cell.piece && cell.isLegal"
+                      (click)="onSquareClick(cell.sq)">
+
+                      @if (cell.isLegal && !cell.piece) {
+                        <div class="move-dot"></div>
+                      }
+                      @if (cell.piece) {
+                        <span class="piece">{{ getPiece(cell.piece) }}</span>
+                      }
+                      @if (cell.sq[0] === 'a') {
+                        <span class="rank-label">{{ cell.sq[1] }}</span>
+                      }
+                      @if (cell.sq[1] === '1') {
+                        <span class="file-label">{{ cell.sq[0] }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="side-section">
+            <div class="players-card">
+              <div class="player">
+                <span class="player-color">{{ playerColor === 'b' ? '♚' : '♔' }}</span>
+                <span class="player-name">Соперник</span>
+                <span class="player-status" [class.online]="opponentConnected">
+                  {{ opponentConnected ? 'онлайн' : 'офлайн' }}
+                </span>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="player">
+                <span class="player-color">{{ playerColor === 'w' ? '♔' : '♚' }}</span>
+                <span class="player-name">Вы</span>
+                <span class="player-status online">онлайн</span>
+              </div>
+            </div>
+
+            <div class="moves-card">
+              <span class="section-label">ИСТОРИЯ ХОДОВ</span>
+              <div class="moves-list">
+                @for (move of moveHistory; track $index; let i = $index) {
+                  @if (i % 2 === 0) {
+                    <div class="move-pair">
+                      <span class="move-num">{{ (i / 2) + 1 }}.</span>
+                      <span class="move">{{ moveHistory[i] }}</span>
+                      <span class="move">{{ moveHistory[i + 1] || '' }}</span>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+
+            <div class="room-badge">
+              Комната: <strong>{{ roomCode }}</strong>
+            </div>
+
+            <button class="btn-secondary draw-btn" (click)="offerDraw()">
+              Предложить ничью
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mode === 'finished') {
+    <div class="finished-screen">
+      <div class="container">
+        <div class="result-card">
+          <h1>{{ getResultText() }}</h1>
+          <p class="moves-count">{{ moveHistory.length }} ходов сыграно</p>
+          <div class="result-actions">
+            <button class="btn-primary" (click)="newGame()">
+              Новая игра
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

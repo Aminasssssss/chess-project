@@ -1,0 +1,68 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-label">CHESS ARENA KZ</span>
+      <h1>Войти</h1>
+      <p>Продолжи с того места где остановился</p>
+    </div>
+
+    <div class="auth-form">
+      <div class="field">
+        <label>Имя пользователя</label>
+        <input
+          type="text"
+          [(ngModel)]="form.username"
+          placeholder="username"
+          [class.error-input]="error"
+        />
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input
+          type="password"
+          [(ngModel)]="form.password"
+          placeholder="••••••••"
+          [class.error-input]="error"
+          (keyup.enter)="onSubmit()"
+        />
+      </div>
+
+      @if (error) {
+        <div class="error-msg">{{ error }}</div>
+      }
+
+      <button
+        class="btn-primary submit-btn"
+        (click)="onSubmit()"
+        [disabled]="loading">
+        {{ loading ? 'Входим...' : 'Войти' }}
+      </button>
+
+      <p class="auth-switch">
+        Нет аккаунта?
+        <a routerLink="/register">Зарегистрироваться</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-visual">
+    <div class="visual-content">
+      <h2>Добро пожаловать<br>в <span>Chess Arena</span></h2>
+      <div class="visual-stats">
+        <div class="vs">
+          <span class="vs-num">1200</span>
+          <span class="vs-label">Стартовый ELO</span>
+        </div>
+        <div class="vs">
+          <span class="vs-num">AI</span>
+          <span class="vs-label">Разбор партий</span>
+        </div>
+        <div class="vs">
+          <span class="vs-num">KZ</span>
+          <span class="vs-label">League</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

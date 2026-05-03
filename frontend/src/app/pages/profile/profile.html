@@ -1,0 +1,203 @@
+<div class="profile-page">
+  <div class="page-header">
+    <div class="container">
+      @if (loading) {
+        <div class="loading">Загружаем профиль...</div>
+      } @else {
+        <div class="header-content">
+          <div class="user-info">
+            <div class="avatar">
+              {{ profile.username[0].toUpperCase() }}
+            </div>
+            <div class="user-details">
+              <span class="section-label">ПРОФИЛЬ</span>
+              <h1>{{ profile.username }}</h1>
+              <div class="user-meta">
+                <span class="elo-badge">{{ profile.elo }} ELO</span>
+                @if (profile.is_pro) {
+                  <span class="pro-badge">PRO</span>
+                }
+                @if (profile.city) {
+                  <span class="city-badge">{{ profile.city }}</span>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="header-actions">
+            @if (!profile.is_pro) {
+              <button class="btn-upgrade" (click)="showProModal = true">
+                Upgrade to Pro — 500 монет
+              </button>
+            }
+            <button class="btn-secondary" (click)="logout()">
+              Выйти
+            </button>
+          </div>
+        </div>
+
+        @if (upgradeMsg) {
+          <div class="upgrade-msg">{{ upgradeMsg }}</div>
+        }
+      }
+    </div>
+  </div>
+
+  @if (!loading) {
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.elo }}</span>
+          <span class="stat-label">ELO рейтинг</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.wins }}</span>
+          <span class="stat-label">Победы</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ getWinRate() }}%</span>
+          <span class="stat-label">Винрейт</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.streak }}</span>
+          <span class="stat-label">Серия побед</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.coins }}</span>
+          <span class="stat-label">Монеты</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.max_streak }}</span>
+          <span class="stat-label">Лучшая серия</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.puzzle_best_score || 0 }}</span>
+          <span class="stat-label">Рекорд Puzzle</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{{ profile.puzzles_solved_total || 0 }}</span>
+          <span class="stat-label">Задач решено</span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'stats'" (click)="activeTab = 'stats'">
+          История игр
+        </button>
+        <button class="tab" [class.active]="activeTab === 'achievements'" (click)="activeTab = 'achievements'">
+          Достижения
+        </button>
+        <button class="tab" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
+          Настройки
+        </button>
+      </div>
+
+      @if (activeTab === 'stats') {
+        <div class="games-list">
+          @for (game of games; track game.id) {
+            <div class="game-row" [class]="game.result">
+              <span class="game-opponent">vs {{ game.opponent }}</span>
+              <span class="game-color">{{ game.player_color === 'white' ? 'Белые' : 'Чёрные' }}</span>
+              <span class="game-result">
+                {{ game.result === 'white' ? 'Победа' : game.result === 'draw' ? 'Ничья' : 'Поражение' }}
+              </span>
+              <span class="game-date">{{ game.created_at | date:'dd.MM.yyyy' }}</span>
+            </div>
+          }
+          @if (games.length === 0) {
+            <div class="empty">Сыграй первую партию!</div>
+          }
+        </div>
+      }
+
+      @if (activeTab === 'achievements') {
+        <div class="achievements-grid">
+          @for (ach of achievements; track ach.id) {
+            <div class="achievement-card">
+              <span class="ach-icon">{{ ach.icon }}</span>
+              <h3>{{ ach.title }}</h3>
+              <p>{{ ach.description }}</p>
+            </div>
+          }
+          @if (achievements.length === 0) {
+            <div class="empty">Достижения появятся после игр</div>
+          }
+        </div>
+      }
+
+      @if (activeTab === 'settings') {
+        <div class="settings-form">
+          <div class="field">
+            <label>Город</label>
+            <select [(ngModel)]="editCity">
+              <option value="">Выбери город</option>
+              <option value="Алматы">Алматы</option>
+              <option value="Астана">Астана</option>
+              <option value="Шымкент">Шымкент</option>
+              <option value="Қарағанды">Қарағанды</option>
+              <option value="Ақтобе">Ақтобе</option>
+              <option value="Тараз">Тараз</option>
+              <option value="Павлодар">Павлодар</option>
+              <option value="Өскемен">Өскемен</option>
+            </select>
+          </div>
+          <button class="btn-primary" (click)="saveCity()">
+            Сохранить
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+
+@if (showProModal) {
+  <div class="modal-overlay" (click)="showProModal = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="pro-crown">♛</span>
+        <h2>Chess Arena Pro</h2>
+        <p>Открой полный доступ ко всем возможностям</p>
+      </div>
+      <div class="modal-perks">
+        <div class="perk-item">
+          <div class="perk-dot"></div>
+          <div>
+            <strong>Кастомные скины доски</strong>
+            <span>Эксклюзивные темы только для Pro</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-dot"></div>
+          <div>
+            <strong>Детальная аналитика</strong>
+            <span>График ELO, разбор каждого хода</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-dot"></div>
+          <div>
+            <strong>AI Coach без лимитов</strong>
+            <span>Неограниченный разбор партий</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-dot"></div>
+          <div>
+            <strong>Приоритет в турнирах</strong>
+            <span>Ранний доступ и бонусные монеты</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="price-row">
+          <span class="price">500 монет</span>
+          <span class="price-sub">единоразово, навсегда</span>
+        </div>
+        <a routerLink="/pricing" class="btn-primary modal-btn" (click)="showProModal = false">
+          Получить Pro
+        </a>
+        <button class="btn-cancel" (click)="showProModal = false">Отмена</button>
+      </div>
+    </div>
+  </div>
+}

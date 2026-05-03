@@ -1,0 +1,191 @@
+.leaderboard-page {
+  min-height: calc(100vh - 64px);
+
+  .page-header {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+
+    h1 {
+      font-size: 3rem;
+      margin: 0.5rem 0 0.75rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .city-league {
+    padding: 3rem 0 2rem;
+
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+
+      .city-card {
+        background: var(--dark-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          border-color: var(--gold);
+          transform: translateY(-2px);
+        }
+
+        &.top {
+          border-color: var(--gold);
+          background: rgba(201, 168, 76, 0.05);
+        }
+
+        .city-rank {
+          font-family: 'Playfair Display', serif;
+          font-size: 1.5rem;
+          color: var(--gold);
+          font-weight: 600;
+        }
+
+        .city-name {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .city-elo {
+          font-size: 0.8rem;
+          color: var(--gold);
+          font-weight: 500;
+        }
+
+        .city-count {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+      }
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      &.active {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--dark);
+        font-weight: 600;
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 4rem;
+    color: var(--text-muted);
+  }
+
+  .players-table {
+    padding: 2rem 0;
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 60px 1fr 1fr 100px 100px 100px;
+      padding: 0.75rem 1rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 1fr 100px 100px 100px;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      align-items: center;
+
+      &:hover {
+        background: var(--dark-2);
+      }
+
+      &.top-three {
+        .rank {
+          color: var(--gold);
+          font-family: 'Playfair Display', serif;
+          font-weight: 600;
+        }
+      }
+
+      .rank {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .username {
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .city {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .elo {
+        color: var(--gold);
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .wins {
+        color: var(--success);
+        font-weight: 500;
+      }
+
+      .streak {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+    }
+
+    .empty {
+      text-align: center;
+      padding: 4rem;
+      color: var(--text-muted);
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<div class="puzzle-page">
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">PUZZLE RUSH</span>
+      <h1>Тренировка тактики</h1>
+      <p>Реши максимум задач за 5 минут</p>
+    </div>
+  </div>
+
+  <div class="container">
+    @if (mode === 'waiting') {
+      <div class="start-screen">
+        <div class="difficulty-select">
+          <span class="section-label">СЛОЖНОСТЬ</span>
+          <div class="diff-options">
+            @for (d of difficulties; track d.value) {
+              <button class="diff-btn" [class.active]="selectedDifficulty === d.value" (click)="selectedDifficulty = d.value">
+                {{ d.label }}
+              </button>
+            }
+          </div>
+        </div>
+        <div class="rules">
+          <div class="rule-card"><span class="rule-num">5</span><span class="rule-label">минут</span></div>
+          <div class="rule-card"><span class="rule-num">10</span><span class="rule-label">задач</span></div>
+          <div class="rule-card"><span class="rule-num">+10</span><span class="rule-label">очков за решение</span></div>
+        </div>
+        <button class="btn-primary start-btn" (click)="startRush()">Начать Puzzle Rush</button>
+      </div>
+    }
+
+    @if (mode === 'playing') {
+      <div class="playing-screen">
+        <div class="game-header">
+          <div class="timer" [class.urgent]="timeLeft < 60">{{ getTimeFormatted() }}</div>
+          <div class="score-info">
+            <span class="score">{{ score }} очков</span>
+            <span class="solved">{{ solved }} решено</span>
+          </div>
+        </div>
+
+        @if (loading) {
+          <div class="loading">Загружаем задачу...</div>
+        } @else if (puzzle) {
+          <div class="puzzle-layout">
+            <app-puzzle-board
+              [fen]="puzzle.fen"
+              [solution]="puzzle.solution"
+              [active]="rushActive"
+              (solved)="onPuzzleSolved($event)">
+            </app-puzzle-board>
+            <div class="puzzle-info">
+              <span class="section-label">ЗАДАЧА {{ solved + 1 }}</span>
+              <h3>{{ puzzle.description || 'Найди лучший ход' }}</h3>
+              <div class="difficulty-badge" [class]="puzzle.difficulty">
+                {{ puzzle.difficulty === 'easy' ? 'Лёгкий' : puzzle.difficulty === 'medium' ? 'Средний' : 'Сложный' }}
+              </div>
+              <p class="hint-text">Ходят {{ puzzle.fen.includes(' w ') ? 'белые' : 'чёрные' }}</p>
+              @if (showSolution) {
+                <div class="solution-hint">
+                  Лучший ход: <strong>{{ puzzle.solution[0] }}</strong>
+                </div>
+                <button class="btn-primary" (click)="nextPuzzle()">Следующая задача →</button>
+              } @else {
+                <button class="btn-secondary" (click)="onSkip()">Показать решение</button>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="empty">Нет задач. Добавьте через Django admin.</div>
+        }
+      </div>
+    }
+
+    @if (mode === 'finished') {
+      <div class="finished-screen">
+        <h2>Время вышло!</h2>
+        <div class="results">
+          <div class="result-card"><span class="result-num">{{ score }}</span><span class="result-label">Очков</span></div>
+          <div class="result-card"><span class="result-num">{{ solved }}</span><span class="result-label">Решено</span></div>
+          <div class="result-card"><span class="result-num">{{ failed }}</span><span class="result-label">Пропущено</span></div>
+        </div>
+        @if (coinsEarned > 0) {
+          <div class="coins-earned">
+            🪙 +{{ coinsEarned }} монет добавлено!
+          </div>
+        }
+        <button class="btn-primary" (click)="restart()">Сыграть снова</button>
+      </div>
+    }
+  </div>
+</div>

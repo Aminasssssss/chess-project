@@ -1,0 +1,47 @@
+<div class="puzzle-board-wrapper">
+  <div class="board-container">
+    <div class="rank-labels">
+      @for (rank of [8,7,6,5,4,3,2,1]; track rank) {
+        <span>{{ rank }}</span>
+      }
+    </div>
+    <div class="puzzle-board">
+      @for (row of board; track $index) {
+        <div class="row">
+          @for (cell of row; track cell.sq) {
+            <div
+              class="square"
+              [class.light]="cell.isLight"
+              [class.dark]="!cell.isLight"
+              [class.selected]="cell.isSelected"
+              [class.legal]="cell.isLegal"
+              [class.last-move]="cell.isLastMove"
+              [class.has-piece]="cell.piece && cell.isLegal"
+              (click)="onSquareClick(cell.sq)">
+
+              @if (cell.isLegal && !cell.piece) {
+                <div class="move-dot"></div>
+              }
+
+              @if (cell.piece) {
+                <span class="piece">{{ getPiece(cell.piece) }}</span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div class="file-labels">
+    <span></span>
+    @for (file of ['a','b','c','d','e','f','g','h']; track file) {
+      <span>{{ file }}</span>
+    }
+  </div>
+
+  @if (message) {
+    <div class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+      {{ message }}
+    </div>
+  }
+</div>

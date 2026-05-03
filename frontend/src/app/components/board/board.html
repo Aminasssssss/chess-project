@@ -1,0 +1,57 @@
+<div class="board-wrapper">
+  @if (timeControl.minutes) {
+    <div class="clock" [class.active]="chess.turn() !== playerColor && !isAiThinking">
+      <span class="clock-label">{{ playerColor === 'w' ? '♚ Чёрные' : '♔ Белые' }}</span>
+      <span class="clock-time" [class.low]="(playerColor === 'w' ? blackTime : whiteTime) < 30">
+        {{ formatTime(playerColor === 'w' ? blackTime : whiteTime) }}
+      </span>
+    </div>
+  }
+
+  <div class="status-bar">
+    <span class="status-text" [class.thinking]="isAiThinking">{{ status }}</span>
+  </div>
+
+  @if (chess.turn() === playerColor && !isAiThinking && !chess.isGameOver()) {
+    <button class="hint-btn" (click)="getHint()" [disabled]="hintLoading">
+      {{ hintLoading ? 'Думаю...' : 'Подсказка' }}
+    </button>
+  }
+
+  <div class="board">
+    @for (row of board; track $index) {
+      <div class="row">
+        @for (cell of row; track cell.sq) {
+          <div
+            class="square"
+            [class.legal]="cell.isLegal"
+            [class.has-piece]="cell.piece && cell.isLegal"
+            [style.background]="cell.isSelected ? '#f6f669' : (hintSquares && (cell.sq === hintSquares.from || cell.sq === hintSquares.to)) ? 'rgba(100,200,100,0.6)' : cell.isLastMove ? 'rgba(246,246,105,0.4)' : cell.isCheck ? 'rgba(220,40,40,0.6)' : cell.isLight ? boardTheme.light : boardTheme.dark"
+            (click)="onSquareClick(cell.sq)">
+            @if (cell.isLegal && !cell.piece) {
+              <div class="move-dot"></div>
+            }
+            @if (cell.piece) {
+              <span class="piece">{{ getPiece(cell.piece) }}</span>
+            }
+            @if (cell.sq[0] === 'a') {
+              <span class="rank-label">{{ cell.sq[1] }}</span>
+            }
+            @if (cell.sq[1] === '1') {
+              <span class="file-label">{{ cell.sq[0] }}</span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (timeControl.minutes) {
+    <div class="clock" [class.active]="chess.turn() === playerColor && !isAiThinking">
+      <span class="clock-label">{{ playerColor === 'w' ? '♔ Белые' : '♚ Чёрные' }}</span>
+      <span class="clock-time" [class.low]="(playerColor === 'w' ? whiteTime : blackTime) < 30">
+        {{ formatTime(playerColor === 'w' ? whiteTime : blackTime) }}
+      </span>
+    </div>
+  }
+</div>

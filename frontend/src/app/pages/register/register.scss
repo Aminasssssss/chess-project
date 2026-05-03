@@ -1,0 +1,38 @@
+@use '../login/login.scss';
+
+.auth-page {
+  .auth-visual {
+    &::before {
+      content: '♔';
+    }
+
+    .visual-content {
+      .perks {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        border-left: 1px solid var(--border);
+        padding-left: 2rem;
+
+        .perk {
+          display: flex;
+          flex-direction: column;
+
+          .perk-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gold);
+          }
+
+          .perk-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+          }
+        }
+      }
+    }
+  }
+}

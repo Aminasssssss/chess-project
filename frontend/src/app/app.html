@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <a routerLink="/">
+      <span class="logo">♟</span>
+      <span class="brand-name">Chess Arena KZ</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a routerLink="/play">Играть</a>
+    <a routerLink="/leaderboard">Рейтинг</a>
+    <a routerLink="/puzzle">Puzzle Rush</a>
+    <a routerLink="/pricing">Тарифы</a>
+    <a routerLink="/coach">AI Тренер</a>
+    @if (auth.isLoggedIn()) {
+      <a routerLink="/profile">Профиль</a>
+      <button class="btn-logout" (click)="auth.logout()">Выйти</button>
+    } @else {
+      <a routerLink="/login">Войти</a>
+      <a routerLink="/register" class="btn-register">Регистрация</a>
+    }
+    <button class="theme-toggle" (click)="toggleTheme()">
+      {{ isDarkTheme() ? '○' : '●' }}
+    </button>
+
+  </div>
+</nav>
+<main>
+  <router-outlet />
+</main>

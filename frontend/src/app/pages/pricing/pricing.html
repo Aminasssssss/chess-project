@@ -1,0 +1,43 @@
+<div class="pricing-page">
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">ТАРИФЫ</span>
+      <h1>Выбери свой уровень</h1>
+      <p>Начни бесплатно, перейди на Pro когда будешь готов</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="plans-grid">
+      @for (plan of plans; track plan.name) {
+        <div class="plan-card" [class.highlight]="plan.highlight" [class.soon]="plan.soon">
+          @if (plan.highlight) {
+            <div class="popular-badge">Популярный</div>
+          }
+          <div class="plan-header">
+            <h2>{{ plan.name }}</h2>
+            <div class="plan-price">{{ plan.price }}</div>
+            <p>{{ plan.desc }}</p>
+          </div>
+          <div class="plan-features">
+            @for (f of plan.features; track f) {
+              <div class="feature-row enabled">
+                <span class="feature-dot"></span>
+                <span>{{ f }}</span>
+              </div>
+            }
+            @for (f of plan.disabled; track f) {
+              <div class="feature-row disabled">
+                <span class="feature-dot"></span>
+                <span>{{ f }}</span>
+              </div>
+            }
+          </div>
+          <a [routerLink]="plan.route" class="plan-cta" [class.disabled]="plan.soon">
+            {{ plan.cta }}
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</div>

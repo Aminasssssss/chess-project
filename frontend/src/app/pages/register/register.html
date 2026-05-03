@@ -1,0 +1,86 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-label">CHESS ARENA KZ</span>
+      <h1>Регистрация</h1>
+      <p>Создай аккаунт и получи 100 монет на старте</p>
+    </div>
+
+    <div class="auth-form">
+      <div class="field">
+        <label>Имя пользователя *</label>
+        <input
+          type="text"
+          [(ngModel)]="form.username"
+          placeholder="username"
+          [class.error-input]="error"
+        />
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="form.email"
+          placeholder="email@example.com"
+        />
+      </div>
+
+      <div class="field">
+        <label>Пароль *</label>
+        <input
+          type="password"
+          [(ngModel)]="form.password"
+          placeholder="••••••••"
+          [class.error-input]="error"
+        />
+      </div>
+
+      <div class="field">
+        <label>Город</label>
+        <select [(ngModel)]="form.city">
+          <option value="">Выбери город</option>
+          @for (city of cities; track city) {
+            <option [value]="city">{{ city }}</option>
+          }
+        </select>
+      </div>
+
+      @if (error) {
+        <div class="error-msg">{{ error }}</div>
+      }
+
+      <button
+        class="btn-primary submit-btn"
+        (click)="onSubmit()"
+        [disabled]="loading">
+        {{ loading ? 'Создаём аккаунт...' : 'Создать аккаунт' }}
+      </button>
+
+      <p class="auth-switch">
+        Уже есть аккаунт?
+        <a routerLink="/login">Войти</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-visual">
+    <div class="visual-content">
+      <h2>Начни путь<br>к <span>гроссмейстеру</span></h2>
+      <div class="perks">
+        <div class="perk">
+          <span class="perk-num">100</span>
+          <span class="perk-text">монет на старте</span>
+        </div>
+        <div class="perk">
+          <span class="perk-num">1200</span>
+          <span class="perk-text">начальный ELO рейтинг</span>
+        </div>
+        <div class="perk">
+          <span class="perk-num">∞</span>
+          <span class="perk-text">партий против AI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
