@@ -222,7 +222,6 @@
   border: 1px solid var(--border);
   border-radius: 10px;
 }
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 .puzzle-page { min-height:100vh; background:#080510; color:#f0ebe0; overflow-x:hidden; }
 
@@ -240,7 +239,7 @@
 @keyframes correctFlash{ 0%{background:rgba(76,175,125,.2)} 100%{background:transparent} }
 @keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
-/* ── HEADER ─────────────────────────────────────────── */
+
 .pz-header {
   position:relative; overflow:hidden;
   background:linear-gradient(135deg,#0d0820,#080510);
@@ -261,10 +260,10 @@
   p  { font-family:'Inter',sans-serif; font-size:14px; color:#6a6050; }
 }
 
-/* ── BODY ────────────────────────────────────────────── */
+
 .pz-body { max-width:1200px; margin:0 auto; padding:2rem 4% 4rem; }
 
-/* ── START SCREEN ────────────────────────────────────── */
+
 .start-screen { max-width:600px; margin:0 auto; }
 
 .diff-select { margin-bottom:2rem;
@@ -305,17 +304,17 @@
   &:hover { transform:translateY(-3px); box-shadow:0 20px 50px rgba(201,168,76,.5); }
 }
 
-/* ── PLAYING SCREEN ──────────────────────────────────── */
+
 .playing-screen { display:flex; flex-direction:column; gap:1.5rem; }
 
-/* Game header */
+
 .game-hdr {
   display:flex; align-items:center; gap:2rem; flex-wrap:wrap;
   background:linear-gradient(135deg,#0f0d1a,#12100f);
   border:1px solid rgba(201,168,76,.12); border-radius:18px; padding:1.25rem 1.5rem;
 }
 
-/* Circular timer */
+
 .circ-timer {
   position:relative; width:80px; height:80px; flex-shrink:0;
 
@@ -334,14 +333,14 @@
   }
 }
 
-/* Score info */
+
 .score-info { display:flex; gap:2rem; flex-wrap:wrap;
   .si-item { display:flex; flex-direction:column; gap:.2rem;
     .si-num { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; color:#c9a84c; line-height:1; }
     .si-lbl { font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:#4a4050; font-weight:600; } }
 }
 
-/* Combo */
+
 .combo-display {
   margin-left:auto;
   .cd-badge {
@@ -353,7 +352,7 @@
   }
 }
 
-/* Streak fire */
+
 .streak-fire { display:flex; align-items:center; gap:.3rem; margin-left:.5rem;
   .sf-icon { font-size:1.2rem; color:#e07030; animation:fireWave .6s ease-in-out infinite;
     @for $i from 1 through 5 {
@@ -364,10 +363,10 @@
     }  .sf-num  { font-family:'Inter',sans-serif; font-size:11px; color:#e07030; font-weight:600; }
 }
 
-/* Puzzle layout */
+
 .puzzle-layout { display:grid; grid-template-columns:auto 1fr; gap:2rem; align-items:start; }
 
-/* Puzzle info */
+
 .puzzle-info { display:flex; flex-direction:column; gap:1rem;
   background:linear-gradient(135deg,#0f0d1a,#12100f);
   border:1px solid rgba(201,168,76,.1); border-radius:18px; padding:1.5rem;
@@ -401,11 +400,11 @@
 .btn-next { background:#c9a84c; color:#080510;
   &:hover { background:#e8c96a; transform:translateY(-1px); } }
 
-/* Loading */
+
 .pz-loading,.pz-empty { text-align:center; padding:3rem; color:#4a4050;
   font-family:'Inter',sans-serif; font-size:13px; }
 
-/* ── FINISHED SCREEN ─────────────────────────────────── */
+
 .finished-screen { display:flex; justify-content:center; align-items:flex-start; padding:2rem 0; }
 
 .result-card {

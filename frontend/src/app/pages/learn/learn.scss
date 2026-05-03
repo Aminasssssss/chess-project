@@ -27,7 +27,7 @@
 .lps-head { margin-bottom:2rem;
   h2 { font-family:'Playfair Display',serif; font-size:2rem; color:#f0ebe0; margin-top:.4rem; } }
 
-/* Streamers */
+
 .streamers-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 
 .sc-card {
@@ -60,7 +60,7 @@
 
 @keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-/* Openings */
+
 .openings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 
 .op-card {
@@ -85,7 +85,7 @@
   .op-play  { font-family:'Inter',sans-serif; font-size:12px; color:#5a5050; transition:color .2s; }
 }
 
-/* Tactics */
+
 .tactics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 
 .tc-card {

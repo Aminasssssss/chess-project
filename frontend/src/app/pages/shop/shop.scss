@@ -45,7 +45,7 @@
   &.st-active { background:rgba(201,168,76,.1); border-color:rgba(201,168,76,.35); color:#c9a84c; }
 }
 
-/* Themes */
+
 .themes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
 
 .th-card {
@@ -96,7 +96,7 @@
   }
 }
 
-/* Titles */
+
 .titles-hint { font-family:'Inter',sans-serif; font-size:13px; color:#5a5050; margin-bottom:1.5rem; }
 .titles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 

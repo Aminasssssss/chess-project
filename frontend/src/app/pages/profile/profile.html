@@ -1,6 +1,6 @@
 <div class="profile-page">
 
-  <!-- Ambient bg -->
+  
   <div class="pp-ambient">
     <span class="pa" style="left:2%;top:8%;font-size:7rem;--d:9s;--del:0s;--r:-8deg;--y:-25px">♔</span>
     <span class="pa" style="right:3%;top:12%;font-size:5rem;--d:11s;--del:2s;--r:6deg;--y:-18px">♛</span>
@@ -20,7 +20,7 @@
 
   @if (!loading && profile) {
 
-    <!-- ══ HEADER ══ -->
+    
     <div class="profile-header">
       <div class="ph-inner">
 
@@ -79,7 +79,7 @@
 
     <div class="profile-body">
 
-      <!-- ══ DAILY STREAK ══ -->
+      
       <div class="daily-card">
         <div class="dc-left">
           <span class="dc-label">ЕЖЕДНЕВНЫЙ БОНУС</span>
@@ -104,7 +104,7 @@
         </div>
       </div>
 
-      <!-- ══ STATS GRID ══ -->
+      
       <div class="stats-grid">
         @for (s of statCards; track s.label) {
           <div class="stat-card" [class.sc-gold]="s.gold">
@@ -116,7 +116,7 @@
         }
       </div>
 
-      <!-- ══ ELO GRAPH + WLD ══ -->
+      
       <div class="charts-row">
 
         <div class="elo-graph-card">
@@ -166,7 +166,7 @@
             </div>
           </div>
 
-          <!-- Donut chart -->
+          
           <div class="donut-wrap">
             <svg viewBox="0 0 100 100" class="donut-svg">
               <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(201,168,76,.08)" stroke-width="12"/>
@@ -184,7 +184,7 @@
 
       </div>
 
-      <!-- ══ QUICK TIP ══ -->
+      
       <div class="tip-card">
         <div class="tc-head">
           <span class="card-label">СОВЕТ AI ТРЕНЕРА</span>
@@ -199,7 +199,7 @@
         }
       </div>
 
-      <!-- ══ RIVAL ══ -->
+      
       @if (rival) {
         <div class="rival-card">
           <span class="card-label">ГЛАВНЫЙ СОПЕРНИК</span>
@@ -214,7 +214,7 @@
         </div>
       }
 
-      <!-- ══ EXTENDED STATS ══ -->
+      
       @if (extendedStats) {
         <div class="extended-grid">
           <div class="ext-card">
@@ -242,7 +242,7 @@
         </div>
       }
 
-      <!-- ══ OPENING REPERTOIRE ══ -->
+      
       @if (extendedStats?.top_openings?.length) {
         <div class="openings-card">
           <span class="card-label">РЕПЕРТУАР ДЕБЮТОВ</span>
@@ -261,7 +261,7 @@
         </div>
       }
 
-      <!-- ══ TABS ══ -->
+      
       <div class="tabs">
         <button class="tab" [class.active]="activeTab==='stats'"        (click)="activeTab='stats'">История игр</button>
         <button class="tab" [class.active]="activeTab==='achievements'" (click)="activeTab='achievements'">Достижения</button>
@@ -328,7 +328,7 @@
   }
 </div>
 
-<!-- PRO MODAL -->
+
 @if (showProModal) {
   <div class="modal-overlay" (click)="showProModal=false">
     <div class="pro-modal" (click)="$event.stopPropagation()">

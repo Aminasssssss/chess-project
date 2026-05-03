@@ -130,7 +130,6 @@
     }
   }
 }
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 .pricing-page { min-height:100vh; background:#080510; color:#f0ebe0; overflow-x:hidden; }
 
@@ -142,7 +141,7 @@
 @keyframes cardHover{ from{transform:translateY(0) scale(1)} to{transform:translateY(-8px) scale(1.01)} }
 @keyframes dotPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
 
-/* ── HEADER ─────────────────────────────────────────── */
+
 .pricing-header {
   position:relative; overflow:hidden;
   background:linear-gradient(135deg,#0d0820,#080510);
@@ -163,10 +162,10 @@
   p  { font-family:'Inter',sans-serif; font-size:15px; color:#6a6050; line-height:1.75; }
 }
 
-/* ── BODY ────────────────────────────────────────────── */
+
 .pricing-body { max-width:1100px; margin:0 auto; padding:3rem 4% 5rem; }
 
-/* ── PLANS ───────────────────────────────────────────── */
+
 .plans-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
 
 .plan-card {
@@ -237,7 +236,7 @@
   }
 }
 
-/* ── COMPARISON ──────────────────────────────────────── */
+
 .comparison { margin-top:4rem; }
 
 .cmp-label { display:block; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.2em;
@@ -268,7 +267,7 @@
   }
 }
 
-/* ── FAQ ─────────────────────────────────────────────── */
+
 .faq-section { margin-top:4rem; }
 .faq-label { display:block; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.2em;
   text-transform:uppercase; color:#c9a84c; font-weight:600; margin-bottom:1.25rem; }

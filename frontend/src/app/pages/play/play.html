@@ -1,6 +1,6 @@
 <div class="play-page">
 
-  <!-- Confetti -->
+  
   @if (showConfetti) {
     <div class="confetti-field" aria-hidden="true">
       @for (i of confettiArr; track i) {
@@ -9,7 +9,7 @@
     </div>
   }
 
-  <!-- ══ SELECT SCREEN ══ -->
+  
   @if (mode === 'select') {
     <div class="select-screen">
       <div class="ss-ambient">
@@ -29,7 +29,7 @@
       <div class="ss-inner">
         <div class="ss-grid">
 
-          <!-- LEFT: 3D piece + title -->
+          
           <div class="ss-left">
             <div class="ss-3d-piece">
               <app-chess-piece [type]="'knight'" [thinking]="false"></app-chess-piece>
@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <!-- RIGHT: settings -->
+          
           <div class="ss-right">
             <div class="mode-cards">
               <div class="mcard mcard-active">
@@ -174,7 +174,7 @@
     </div>
   }
 
-  <!-- ══ GAME SCREEN ══ -->
+  
   @if (mode === 'playing' || mode === 'finished') {
     <div class="game-screen">
       <div class="gs-inner">
@@ -290,7 +290,7 @@
           </div>
         </div>
 
-        <!-- RESULT PANEL -->
+        
         @if (mode === 'finished') {
           <div class="result-panel" [class]="'result-'+getResultClass()">
             <div class="rp-deco">
@@ -348,7 +348,7 @@
     </div>
   }
 
-  <!-- MODAL -->
+  
   @if (showCustomModal) {
     <div class="modal-overlay" (click)="showCustomModal=false">
       <div class="custom-modal" (click)="$event.stopPropagation()">

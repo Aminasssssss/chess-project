@@ -169,7 +169,6 @@
     }
   }
 }
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 .auth-page {
   min-height:100vh; background:#080510; color:#f0ebe0;
@@ -183,7 +182,7 @@
 @keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:.15} }
 @keyframes pieceFloat { 0%,100%{transform:translateY(0) rotate(var(--r,-5deg))} 50%{transform:translateY(var(--y,-18px)) rotate(calc(var(--r,-5deg) + 7deg))} }
 
-/* ── AUTH CARD (LEFT) ────────────────────────────────── */
+
 .auth-card {
   display:flex; flex-direction:column; justify-content:center; align-items:center;
   padding:3rem 4rem; background:linear-gradient(135deg,#0d0820,#080510);
@@ -244,7 +243,7 @@
   a { color:#c9a84c; font-weight:500; transition:opacity .2s; &:hover{opacity:.75;} }
 }
 
-/* ── VISUAL SIDE (RIGHT) ─────────────────────────────── */
+
 .auth-visual {
   position:relative; overflow:hidden;
   background:linear-gradient(135deg,#0d0820,#100828,#0d0820);

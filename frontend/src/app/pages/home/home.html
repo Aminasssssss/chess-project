@@ -1,30 +1,30 @@
 <div class="home-wrap">
 
-  <!-- ══════════════ HERO ══════════════ -->
+  
   <section class="hero" #heroSection>
 
-    <!-- Particle canvas -->
+    
     <canvas #particleCanvas class="p-canvas"></canvas>
 
-    <!-- 3D floating pieces — весь экран -->
+    
     <app-floating-pieces></app-floating-pieces>
 
-    <!-- Gradient orbs -->
+    
     <div class="hero-orb ho1"></div>
     <div class="hero-orb ho2"></div>
     <div class="hero-orb ho3"></div>
     <div class="hero-orb ho4"></div>
 
-    <!-- Gold beams -->
+    
     <div class="beam bm1"></div>
     <div class="beam bm2"></div>
     <div class="beam bm3"></div>
     <div class="beam bm4"></div>
 
-    <!-- Scan sweep -->
+    
     <div class="scan-sweep"></div>
 
-    <!-- Chess grid bg -->
+    
     <div class="chess-grid-bg">
       @for (row of rows; track row) {
         <div class="cgb-row">
@@ -35,24 +35,24 @@
       }
     </div>
 
-    <!-- Rotating rings decoration -->
+    
     <div class="deco-ring r1"></div>
     <div class="deco-ring r2"></div>
     <div class="deco-ring r3"></div>
 
-    <!-- Corner chess pieces decoration -->
+    
     <div class="corner-deco cd-tl">♔</div>
     <div class="corner-deco cd-tr">♛</div>
     <div class="corner-deco cd-bl">♟</div>
     <div class="corner-deco cd-br">♞</div>
 
-    <!-- HERO LAYOUT -->
+    
     <div class="hero-layout">
 
-      <!-- LEFT TEXT -->
+      
       <div class="hero-text">
 
-        <!-- Eyebrow -->
+        
         <div class="eyebrow">
           <span class="e-dot"></span>
           <span class="e-t">Chess Arena KZ</span>
@@ -62,7 +62,7 @@
           <span class="e-live">{{ stats[0].current }}+ онлайн</span>
         </div>
 
-        <!-- Main title -->
+        
         <h1 class="big-title">
           <span class="bt-outline">ШАХМАТЫ</span>
           <span class="bt-center">
@@ -73,14 +73,14 @@
           <span class="bt-solid">УРОВНЯ<span class="bt-dot">.</span></span>
         </h1>
 
-        <!-- Feature pills -->
+        
         <div class="feat-pills">
           @for (f of features; track f) {
             <span class="fp-pill">{{ f }}</span>
           }
         </div>
 
-        <!-- CTA buttons -->
+        
         <div class="hero-actions">
           <a routerLink="/play" class="btn-main">
             <span class="btn-shimmer"></span>
@@ -92,7 +92,7 @@
           <a routerLink="/leaderboard" class="btn-ghost">Kazakhstan League →</a>
         </div>
 
-        <!-- Stats -->
+        
         <div class="hero-stats">
           @for (s of stats; track s.label) {
             <div class="hs">
@@ -102,7 +102,7 @@
           }
         </div>
 
-        <!-- Mini progress bars decorative -->
+        
         <div class="mini-bars">
           <div class="mb-row">
             <span>Алматы</span>
@@ -123,20 +123,20 @@
 
       </div>
 
-      <!-- RIGHT: 3D BOARD -->
+      
       <div class="hero-board-zone">
         <div class="gblob g1"></div>
         <div class="gblob g2"></div>
         <div class="gblob g3"></div>
 
-        <!-- Board glow ring -->
+        
         <div class="board-glow-ring"></div>
 
         <div class="board-3d-container">
           <app-chess-three-d></app-chess-three-d>
         </div>
 
-        <!-- Chips -->
+        
         <div class="fchip fc1" [class.fc-ani]="chipsVisible">
           <div class="fch-ico">♟</div>
           <div class="fch-label">MOVE</div>
@@ -158,7 +158,7 @@
           <div class="fch-val">18</div>
         </div>
 
-        <!-- Win prob mini bar -->
+        
         <div class="win-prob-chip" [class.fc-ani]="chipsVisible">
           <div class="wpc-label">WIN PROBABILITY</div>
           <div class="wpc-bar">
@@ -170,7 +170,7 @@
           </div>
         </div>
 
-        <!-- Live badge -->
+        
         <div class="live-badge">
           <span class="lb-dot"></span>
           <span>Live game in progress</span>
@@ -179,7 +179,7 @@
 
     </div>
 
-    <!-- Scroll indicator -->
+    
     <div class="scroll-ind">
       <div class="si-m"><div class="si-w"></div></div>
       <span>SCROLL</span>
@@ -187,7 +187,7 @@
 
   </section>
 
-  <!-- ══════════════ TICKER ══════════════ -->
+  
   <div class="ticker-strip">
     <div class="ts-inner">
       @for (t of tickerItems; track t) {
@@ -201,7 +201,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ MODES ══════════════ -->
+  
   <section class="modes-sec">
     <div class="ms-inner">
       <div class="ms-head reveal">
@@ -273,7 +273,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ SHOWCASE AI COACH ══════════════ -->
+  
   <section class="showcase-sec">
     <div class="showcase-inner">
 
@@ -348,7 +348,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ BENTO ══════════════ -->
+  
   <section class="bento-sec">
     <div class="bento-head reveal">
       <div>
@@ -360,7 +360,7 @@
 
     <div class="bento-grid">
 
-      <!-- Kazakhstan League — wide -->
+      
       <div class="bc bc-wide reveal">
         <span class="bc-deco">♔</span>
         <span class="bc-tag">KAZAKHSTAN LEAGUE</span>
@@ -381,7 +381,7 @@
         <a routerLink="/leaderboard" class="bc-link">Смотреть рейтинг →</a>
       </div>
 
-      <!-- Win Probability -->
+      
       <div class="bc reveal">
         <span class="bc-deco">♕</span>
         <span class="bc-tag">WIN PROBABILITY</span>
@@ -404,7 +404,7 @@
         </div>
       </div>
 
-      <!-- Ranks -->
+      
       <div class="bc reveal">
         <span class="bc-deco">♗</span>
         <span class="bc-tag">СИСТЕМА РАНГОВ</span>
@@ -421,7 +421,7 @@
         </div>
       </div>
 
-      <!-- Daily bonus -->
+      
       <div class="bc reveal">
         <span class="bc-deco">♘</span>
         <span class="bc-tag">DAILY BONUS</span>
@@ -441,7 +441,7 @@
         </div>
       </div>
 
-      <!-- Shop — tall -->
+      
       <div class="bc bc-tall reveal">
         <span class="bc-deco">♖</span>
         <span class="bc-tag">МАГАЗИН</span>
@@ -460,7 +460,7 @@
         <a routerLink="/shop" class="bc-link">В магазин →</a>
       </div>
 
-      <!-- Achievements -->
+      
       <div class="bc reveal">
         <span class="bc-deco">♙</span>
         <span class="bc-tag">ДОСТИЖЕНИЯ</span>
@@ -480,7 +480,7 @@
         </div>
       </div>
 
-      <!-- Opening detector -->
+      
       <div class="bc reveal">
         <span class="bc-deco">♛</span>
         <span class="bc-tag">OPENING DETECTOR</span>
@@ -499,7 +499,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ LEARN ══════════════ -->
+  
   <section class="learn-sec">
     <div class="learn-inner">
       <div class="learn-left reveal">
@@ -523,7 +523,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ QUOTE ══════════════ -->
+  
   <section class="quote-sec">
     <div class="qs-pattern"></div>
     <div class="qs-fade-l"></div>
@@ -535,7 +535,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ CTA ══════════════ -->
+  
   <section class="cta-sec">
     <app-floating-pieces></app-floating-pieces>
     <div class="cta-orb co1"></div>

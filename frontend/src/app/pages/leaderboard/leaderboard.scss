@@ -25,7 +25,7 @@
   }
 }
 
-/* ── CITY LEAGUE ──────────────────────────────────── */
+
 .city-league {
   margin-bottom: 2rem;
 
@@ -94,7 +94,7 @@
   }
 }
 
-/* ── FILTERS ──────────────────────────────────────── */
+
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -117,7 +117,7 @@
   }
 }
 
-/* ── PODIUM ───────────────────────────────────────── */
+
 .podium {
   display: flex;
   justify-content: center;
@@ -179,7 +179,7 @@
   }
 }
 
-/* ── TABLE ────────────────────────────────────────── */
+
 .players-table {
   background: var(--dark-2);
   border: 1px solid var(--border);
@@ -267,7 +267,6 @@
   }
   .podium { padding: 0; }
 }
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 .leaderboard-page { min-height:100vh; background:#080510; color:#f0ebe0; overflow-x:hidden; }
 
@@ -282,7 +281,7 @@
 @keyframes shimmer  { 0%{left:-100%} 100%{left:200%} }
 @keyframes cityBarW { from{width:0;opacity:0} to{opacity:1} }
 
-/* ── HEADER ─────────────────────────────────────────── */
+
 .lb-header {
   position:relative; overflow:hidden;
   background:linear-gradient(135deg,#0d0820,#080510);
@@ -304,10 +303,10 @@
   p  { font-family:'Inter',sans-serif; font-size:14px; color:#6a6050; }
 }
 
-/* ── CONTAINER ───────────────────────────────────────── */
+
 .lb-body { max-width:1200px; margin:0 auto; padding:2rem 4% 4rem; }
 
-/* ── CITY LEAGUE ─────────────────────────────────────── */
+
 .city-league { margin-bottom:2.5rem; }
 
 .cl-label { display:block; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.2em;
@@ -338,7 +337,7 @@
   .cc-bottom { display:flex; justify-content:space-between; font-family:'Inter',sans-serif; font-size:10px; color:#5a5050; }
 }
 
-/* ── PODIUM ──────────────────────────────────────────── */
+
 .podium {
   display:flex; justify-content:center; align-items:flex-end;
   gap:.75rem; margin-bottom:2.5rem; padding:0 2rem;
@@ -379,7 +378,7 @@
   }
 }
 
-/* ── FILTERS ─────────────────────────────────────────── */
+
 .filters { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1.75rem; }
 
 .filter-btn {
@@ -390,14 +389,14 @@
   &:hover:not(.active) { border-color:rgba(201,168,76,.25); color:#a09080; }
 }
 
-/* ── LOADING ─────────────────────────────────────────── */
+
 .lb-loading { display:flex; justify-content:center; padding:4rem;
   .spin { width:36px;height:36px; border:2px solid rgba(201,168,76,.15);
     border-top-color:#c9a84c; border-radius:50%; animation:goldGlow .8s linear infinite,
   crownBob 0s; animation:spin .8s linear infinite;
     @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}} } }
 
-/* ── TABLE ───────────────────────────────────────────── */
+
 .players-table {
   background:linear-gradient(135deg,#0f0d1a,#12100f);
   border:1px solid rgba(201,168,76,.1); border-radius:18px; overflow:hidden; margin-bottom:3rem;
@@ -448,9 +447,8 @@
     .city-cell,.wins-cell,.streak-cell { display:none; } }
   .podium { padding:0; }
 }
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── KEYFRAMES ──────────────────────────────────────── */
+
 @keyframes fadeUp    { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
 @keyframes rowIn     { from{opacity:0;transform:translateX(-14px)} to{opacity:1;transform:translateX(0)} }
 @keyframes podiumUp  { from{opacity:0;transform:translateY(38px) scale(.92)} to{opacity:1;transform:translateY(0) scale(1)} }
@@ -466,10 +464,10 @@
 @keyframes spinRing  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 @keyframes countUp   { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── BASE ───────────────────────────────────────────── */
+
 .leaderboard-page { min-height:100vh; background:#06040d; color:#f0ebe0; overflow-x:hidden; position:relative; z-index:1; }
 
-/* ── CANVAS LAYERS ──────────────────────────────────── */
+
 .lb-bg-canvas {
   position:fixed; inset:0; width:100%; height:100%;
   pointer-events:none; z-index:0;
@@ -479,7 +477,7 @@
   pointer-events:none; z-index:1;
 }
 
-/* ── AMBIENT ORB BLOBS ──────────────────────────────── */
+
 .lb-orbs {
   position:fixed; inset:0; pointer-events:none; z-index:0;
   .orb { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; animation:orbFloat var(--d,9s) ease-in-out infinite; }
@@ -488,7 +486,7 @@
   .o3 { width:200px;height:200px; background:rgba(201,168,76,.04); top:40%; left:-60px; --ox:10px;--oy:-8px; --d:13s; }
 }
 
-/* ── SCAN LINE ──────────────────────────────────────── */
+
 .lb-scan {
   position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden;
   &::after { content:''; position:absolute; left:0; right:0; height:1px;
@@ -496,7 +494,7 @@
     animation:scanMove 10s linear infinite; }
 }
 
-/* ── FLOATING CHESS PIECES ──────────────────────────── */
+
 .lb-chess-ambient {
   position:fixed; inset:0; pointer-events:none; z-index:0;
   .ca-p {
@@ -507,11 +505,11 @@
   }
 }
 
-/* ── REVEAL ─────────────────────────────────────────── */
+
 .reveal { opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity:1; transform:translateY(0); }
 
-/* ── SECTION LABELS ─────────────────────────────────── */
+
 .section-label {
   font-family:'Inter',sans-serif; font-size:10px; font-weight:700;
   letter-spacing:.2em; text-transform:uppercase; color:#c9a84c;
@@ -523,9 +521,6 @@
   display:flex; align-items:baseline; gap:1rem; margin-bottom:1.25rem;
 }
 
-/* ══════════════════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════════════════ */
 .lb-header {
   position:relative; z-index:10;
   background:linear-gradient(135deg,#0d0820 0%,#06040d 100%);
@@ -540,7 +535,7 @@
   }
 }
 
-/* Live ticker bar */
+
 .lh-live-bar {
   display:flex; align-items:center; gap:1rem;
   border-bottom:1px solid rgba(201,168,76,.06);
@@ -625,12 +620,9 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════
-   BODY
-══════════════════════════════════════════════════════ */
 .lb-body { max-width:1200px; margin:0 auto; padding:2rem 4% 5rem; position:relative; z-index:5; }
 
-/* ── GLOBAL STATS ───────────────────────────────────── */
+
 .global-stats {
   display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; margin-bottom:2.5rem;
 
@@ -661,7 +653,7 @@
   }
 }
 
-/* ── RISING STARS ───────────────────────────────────── */
+
 .rising-section { margin-bottom:2.5rem; }
 
 .rising-grid {
@@ -689,7 +681,7 @@
   }
 }
 
-/* ── LIVE MATCHES ───────────────────────────────────── */
+
 .live-matches { margin-bottom:2.5rem; }
 
 .lm-grid {
@@ -726,7 +718,7 @@
   }
 }
 
-/* ── CITY LEAGUE ────────────────────────────────────── */
+
 .city-league { margin-bottom:2.5rem; }
 
 .city-grid {
@@ -754,7 +746,7 @@
   }
 }
 
-/* ── FILTERS ────────────────────────────────────────── */
+
 .filters { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:2rem; }
 
 .filter-btn {
@@ -765,7 +757,7 @@
   &:hover:not(.active) { border-color:rgba(201,168,76,.25); color:#a09080; }
 }
 
-/* ── 3D PODIUM WRAP ─────────────────────────────────── */
+
 .podium-3d-wrap {
   position:relative; height:380px; border-radius:20px; overflow:hidden;
   border:1px solid rgba(201,168,76,.1); margin-bottom:2.5rem;
@@ -793,7 +785,7 @@
   .pc-period { font-family:'Inter',sans-serif; font-size:10px; color:rgba(201,168,76,.3); letter-spacing:.12em; }
 }
 
-/* ── LOADING ────────────────────────────────────────── */
+
 .lb-loading {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:4rem; gap:.75rem;
@@ -807,7 +799,7 @@
   p { font-family:'Inter',sans-serif; font-size:12px; color:#4a4050; }
 }
 
-/* ── PLAYERS TABLE ──────────────────────────────────── */
+
 .players-table {
   background:linear-gradient(135deg,#0f0d1a,#110e0c);
   border:1px solid rgba(201,168,76,.1); border-radius:18px; overflow:hidden; margin-bottom:2.5rem;
@@ -891,7 +883,7 @@
   }
 }
 
-/* ── CHIPS ──────────────────────────────────────────── */
+
 .chip {
   font-family:'Inter',sans-serif; font-size:9px; font-weight:700; letter-spacing:.08em;
   text-transform:uppercase; border-radius:4px; padding:.12rem .4rem;
@@ -901,14 +893,14 @@
 .chip-rise   { background:rgba(76,175,125,.1); color:#4caf7d; border:1px solid rgba(76,175,125,.2); }
 .chip-crown  { background:rgba(201,168,76,.15); color:#c9a84c; border:1px solid rgba(201,168,76,.3); }
 
-/* ── EMPTY ──────────────────────────────────────────── */
+
 .empty-state {
   text-align:center; padding:3rem; color:#3a3050;
   .empty-piece { font-size:2rem; display:block; margin-bottom:.75rem; opacity:.3; }
   p { font-family:'Inter',sans-serif; font-size:13px; }
 }
 
-/* ── MOST IMPROVED ──────────────────────────────────── */
+
 .improved-section { margin-bottom:2.5rem; }
 
 .improved-row {
@@ -935,7 +927,7 @@
   }
 }
 
-/* ── TOURNAMENT TEASER ──────────────────────────────── */
+
 .tournament-teaser {
   position:relative; overflow:hidden;
   display:flex; justify-content:space-between; align-items:center; gap:2rem;
@@ -989,7 +981,7 @@
   }
 }
 
-/* ── HALL OF FAME ───────────────────────────────────── */
+
 .hof-section { margin-bottom:3rem; }
 
 .hof-grid {
@@ -1013,7 +1005,7 @@
   }
 }
 
-/* ── RESPONSIVE ─────────────────────────────────────── */
+
 @media (max-width:900px) {
   .global-stats { grid-template-columns:repeat(2,1fr); }
   .city-grid    { grid-template-columns:repeat(3,1fr); }
@@ -1036,7 +1028,7 @@
   .podium-3d-wrap { height:280px; }
   .lh-title { font-size:1.8rem; }
 }
-/* ── TOAST ───────────────────────────────────────────────────────── */
+
 .lb-toast {
   position: fixed;
   bottom: 2rem;
@@ -1072,7 +1064,7 @@
   }
 }
 
-/* ── DISABLED BUTTON ─────────────────────────────────────────────── */
+
 .btn-register:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -1080,7 +1072,7 @@
   box-shadow: none;
 }
 
-/* ── RESPONSIVE TOAST ───────────────────────────────────────────── */
+
 @media (max-width: 600px) {
   .lb-toast {
     white-space: normal;

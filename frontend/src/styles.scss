@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700;1,900&display=swap');
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -34,7 +33,7 @@ body.light-theme {
   --border-2: rgba(201,168,76,0.35);
 }
 
-/* ── KEYFRAMES ─────────────────────────────────── */
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(32px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -90,7 +89,7 @@ body.light-theme {
   to   { opacity: 0; transform: translateX(120%); }
 }
 
-/* ── REVEAL (scroll-triggered) ─────────────────── */
+
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -101,7 +100,7 @@ body.light-theme {
   transform: translateY(0);
 }
 
-/* ── BASE ───────────────────────────────────────── */
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -123,13 +122,13 @@ a { text-decoration: none; color: inherit; }
 button { font-family: 'Inter', sans-serif; cursor: pointer; border: none; outline: none; }
 input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
 
-/* ── SCROLLBAR ──────────────────────────────────── */
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--dark); }
 ::-webkit-scrollbar-thumb { background: var(--dark-4); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-/* ── BUTTONS ────────────────────────────────────── */
+
 .btn-primary {
   background: var(--gold);
   color: var(--dark);
@@ -186,7 +185,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   &:hover { color: var(--gold); }
 }
 
-/* ── CARDS ──────────────────────────────────────── */
+
 .card {
   background: var(--dark-2);
   border: 1px solid var(--border);
@@ -200,7 +199,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   }
 }
 
-/* ── SECTION LABEL ──────────────────────────────── */
+
 .section-label {
   display: block;
   font-size: 0.68rem;
@@ -211,7 +210,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   margin-bottom: 0.75rem;
 }
 
-/* ── GOLD TAG ────────────────────────────────────── */
+
 .tag-gold {
   display: inline-block;
   padding: 0.2rem 0.75rem;
@@ -224,7 +223,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   text-transform: uppercase;
 }
 
-/* ── CONTAINER ──────────────────────────────────── */
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -233,7 +232,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
 
 .section { padding: 6rem 0; }
 
-/* ── TOAST ──────────────────────────────────────── */
+
 .toast-container {
   position: fixed;
   bottom: 2rem;
@@ -271,7 +270,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   &.hiding { animation: toastOut 0.3s ease forwards; }
 }
 
-/* ── LOADING SKELETON ───────────────────────────── */
+
 .skeleton {
   background: linear-gradient(90deg, var(--dark-3) 25%, var(--dark-4) 50%, var(--dark-3) 75%);
   background-size: 200% 100%;
@@ -279,12 +278,12 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   border-radius: var(--r);
 }
 
-/* ── PAGE TRANSITION ────────────────────────────── */
+
 .page-enter {
   animation: fadeIn 0.35s ease forwards;
 }
 
-/* ── LIVE DOT ────────────────────────────────────── */
+
 .live-dot {
   display: inline-block;
   width: 6px;
@@ -295,7 +294,7 @@ input, select, textarea { font-family: 'Inter', sans-serif; outline: none; }
   flex-shrink: 0;
 }
 
-/* ── MOBILE ─────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .navbar {
     padding: 0.75rem 1rem;
