@@ -10,7 +10,7 @@
 ## Живой проект
 
 **Сайт:** https://frontend-seven-kappa-36.vercel.app  
-**API:** https://chess-project-5-anui.onrender.com
+**API:** https://shess-project.onrender.com
 
 ---
 
