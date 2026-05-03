@@ -3,7 +3,8 @@
 > Первая казахстанская шахматная платформа с AI-тренером
 
 [![Live Demo](https://img.shields.io/badge/demo-live-green)](https://frontend-seven-kappa-36.vercel.app)
-[![Backend API](https://img.shields.io/badge/api-online-blue)](https://chess-project-5-anui.onrender.com)
+[![Backend API](https://img.shields.io/badge/api-online-blue)](https://shess-project.onrender.com)
+[![Health Check](https://img.shields.io/badge/health-passing-green)](https://shess-project.onrender.com/api/health/)
 [![GitHub](https://img.shields.io/badge/github-repo-black)](https://github.com/Aminasssssss/chess-project)
 
 ## Живой проект
@@ -100,10 +101,10 @@ Chess Arena KZ — это не просто шахматы. Это полноц�
 
 ## Деплой
 
-| Компонент | Ссылка |
-|-----------|--------|
-| Frontend | https://frontend-seven-kappa-36.vercel.app |
-| Backend API | https://chess-project-5-anui.onrender.com |
+| Компонент | Ссылка                                        |
+|-----------|-----------------------------------------------|
+| Frontend | https://frontend-seven-kappa-36.vercel.app    |
+| Backend API | https://shess-project.onrender.com            |
 | Репозиторий | https://github.com/Aminasssssss/chess-project |
 
 ---
