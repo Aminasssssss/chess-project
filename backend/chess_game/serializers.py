@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import PlayerStats, Game, Achievement, Puzzle, Tournament
+from .models import PlayerStats, Game, Achievement, Puzzle, Tournament, ShopItem
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -24,10 +24,15 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlayerStats
-        fields = ['username', 'email', 'elo', 'wins', 'losses',
-                  'draws', 'city', 'streak', 'max_streak', 'coins', 'is_pro',
-                  'puzzle_total_score', 'puzzle_best_score',
-                  'puzzles_solved_total', 'puzzle_games_played']
+        fields = [
+            'username', 'email', 'elo', 'wins', 'losses', 'draws',
+            'city', 'streak', 'max_streak', 'coins', 'is_pro',
+            'puzzle_total_score', 'puzzle_best_score',
+            'puzzles_solved_total', 'puzzle_games_played',
+            'daily_login_streak', 'last_bonus_date',
+            'favorite_opening', 'total_playtime',
+            'board_theme', 'avatar_frame', 'title', 'owned_items',
+        ]
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -66,7 +71,13 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlayerStats
-        fields = ['username', 'elo', 'wins', 'losses', 'draws', 'city', 'games_played', 'streak']
+        fields = ['username', 'elo', 'wins', 'losses', 'draws', 'city', 'games_played', 'streak', 'title']
 
     def get_games_played(self, obj):
         return obj.wins + obj.losses + obj.draws
+
+
+class ShopItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShopItem
+        fields = '__all__'
